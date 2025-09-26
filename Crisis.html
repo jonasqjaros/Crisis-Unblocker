@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crisis Unblocker</title> <!-- Changed Title -->
+    <link rel="icon" id="faviconTag" href="https://cdn-icons-png.freepik.com/512/9073/9073363.png" type="image/png"> <!-- Added ID for favicon tag -->
+    <style>
+        /* --- Original Portal Styles --- */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: #4285f4;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+            cursor: pointer;
+        }
+        .nav {
+            display: flex;
+            gap: 15px;
+            align-items: center; /* Align items vertically */
+        }
+        .nav button {
+            padding: 8px 16px;
+            background-color: white;
+            color: #4285f4;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .nav button:hover {
+            background-color: #e8e8e8;
+        }
+        .nav button.active {
+            background-color: #3367d6;
+            color: white;
+        }
+        /* Gear Icon Button */
+        #settingsButton {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        #settingsButton:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .main-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .app-container {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .app-container.active {
+            display: block;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* YouTube App Styles */
+        .youtube-app {
+            background-color: #f9f9f9;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: auto;
+        }
+        .youtube-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .youtube-header {
+            background-color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .video-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .video-item:hover {
+            transform: translateY(-5px);
+        }
+        .video-thumbnail {
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            position: relative;
+        }
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+        }
+        .video-details {
+            padding: 10px;
+        }
+        .video-title {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .video-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+            height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .search-form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .search-form input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            box-sizing: border-box;
+        }
+        .search-form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        .video-player-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .video-player {
+            width: 100%;
+            height: 400px;
+        }
+        .video-paste-form {
+            margin-top: 35px;
+        }
+        .video-paste-form input[type="text"] {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 4px 0;
+            box-sizing: border-box;
+        }
+        .video-paste-form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .embed-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+        }
+        .embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* Website Loader Styles */
+        .website-loader-app {
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+            height: calc(100% - 40px);
+            overflow-y: auto;
+        }
+        .website-loader-app h1 {
+            text-align: center;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+        }
+        .website-loader-app form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .website-loader-app input[type="text"] {
+            width: 50%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+        .website-loader-app input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .website-loader-app input[type="submit"], .website-loader-app button {
+            padding: 12px 20px;
+            font-size: 16px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .website-loader-app input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+        }
+        .website-loader-app input[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .website-loader-app button {
+            background-color: #28a745;
+            color: white;
+        }
+        .website-loader-app button:hover {
+            background-color: #1e7e34;
+            transform: scale(1.05);
+        }
+        .website-loader-app #iframeContainer {
+            width: 100%;
+            height: 60vh;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .website-loader-app iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .website-loader-app #errorMessage {
+            text-align: center;
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+        .website-loader-app #savedUrls {
+            margin-top: 30px;
+        }
+        .website-loader-app #savedUrls h3 {
+            text-align: center;
+            color: #4a4a4a;
+            margin-bottom: 15px;
+        }
+        .website-loader-app #urlList {
+            list-style: none;
+            padding: 0;
+        }
+        .website-loader-app .url-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .website-loader-app .url-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .website-loader-app .url-item a:hover {
+            color: #0056b3;
+        }
+        .website-loader-app .url-item button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .website-loader-app .url-item button:hover {
+            background-color: #bd2130;
+            transform: scale(1.05);
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f2f5;
+            color: #666;
+            font-size: 14px;
+        }
+        /* --- Settings Menu Styles --- */
+        #settingsMenu {
+            display: none; /* Start hidden - This is the key fix */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 0; /* Adjusted padding */
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 95%;
+            height: 90%;
+            max-width: 1600px;
+            max-height: 90vh;
+            overflow: hidden; /* Prevent internal scrolling */
+            /* display: flex; */ /* Removed duplicate display property */
+            flex-direction: column;
+        }
+        #settingsMenuHeader {
+             background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        #settingsMenuContent {
+            flex: 1;
+            display: flex;
+            overflow: hidden; /* Contain internal scrolling */
+        }
+        #settingsMenuTabs {
+            width: 200px;
+            background-color: #f5f5f5;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            padding-top: 10px;
+        }
+        .settings-tab-button {
+            padding: 12px 15px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #eee;
+        }
+        .settings-tab-button:hover {
+            background-color: #e9e9e9;
+        }
+        .settings-tab-button.active {
+            background-color: #4285f4;
+            color: white;
+        }
+        #settingsMenuPanels {
+            flex: 1;
+            overflow-y: auto; /* Allow scrolling for content */
+            padding: 20px;
+        }
+        .settings-panel {
+            display: none;
+        }
+        .settings-panel.active {
+            display: block;
+        }
+        #settingsMenuFooter {
+            padding: 10px 20px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+            text-align: right;
+        }
+        #settingsMenuFooter button {
+            padding: 8px 15px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #saveSettings {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #closeSettings {
+            background-color: #f44336;
+            color: white;
+        }
+        #saveSettings:hover {
+            background-color: #45a049;
+        }
+        #closeSettings:hover {
+            background-color: #da190b;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        /* --- Embedded HTML Code Runner Styles --- */
+        /* Minimal necessary styles adapted from HTML Code Runner */
+        .code-runner-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa; /* Match portal background */
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+        }
+        .code-runner-header {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            padding: 10px 15px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+        }
+        .code-runner-main-content {
+            display: flex;
+            flex: 1;
+            padding: 10px;
+            gap: 10px;
+            overflow: hidden;
+        }
+        .code-runner-editors-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 250px;
+        }
+        .code-runner-editor-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        .code-runner-editor-header {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            padding: 8px 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .code-runner-textarea {
+            flex: 1;
+            padding: 10px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 13px;
+            border: none;
+            resize: none;
+            outline: none;
+            background-color: #f8f9fa;
+            line-height: 1.4;
+        }
+        .code-runner-textarea:focus {
+            background-color: #fff;
+            box-shadow: inset 0 0 0 1px #3498db;
+        }
+        .code-runner-preview-container {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            min-width: 300px;
+        }
+        .code-runner-preview-header {
+            background: linear-gradient(to right, #27ae60, #2c3e50);
+            color: white;
+            padding: 8px 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #preview-frame-runner {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background-color: white;
+        }
+        .code-runner-controls {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            gap: 10px;
+            background-color: #f0f0f0;
+            border-top: 1px solid #ddd;
+        }
+        .code-runner-btn {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .code-runner-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .code-runner-run-btn {
+            background: linear-gradient(to right, #27ae60, #2ecc71);
+            color: white;
+        }
+        .code-runner-clear-btn {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+        }
+        .code-runner-save-btn {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+        }
+        .code-runner-save-file-btn {
+            background: linear-gradient(to right, #9b59b6, #8e44ad);
+            color: white;
+        }
+        /* --- End Embedded Styles --- */
+         /* Patch Notes Styles */
+        .patch-notes-content {
+            max-height: 70vh; /* Limit height */
+            overflow-y: auto; /* Add scrollbar if needed */
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .patch-notes-content h3 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        .patch-notes-content ul {
+            padding-left: 20px;
+        }
+        .patch-notes-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Fullscreen styles */
+        .code-runner-container:-webkit-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+        .code-runner-container:-moz-full-screen {
+            width: 100%;
+            height: 100%;
+        }
+        .code-runner-container:fullscreen {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 onclick="showApp('home')">Crisis Unblocker</h1> <!-- Changed Title in Header -->
+        <div class="nav">
+            <button onclick="showApp('home')" class="active" id="nav-home">Home</button>
+            <button onclick="showApp('youtube')" id="nav-youtube">YouTube</button>
+            <button onclick="showApp('chatgpt')" id="nav-chatgpt">ChatGPT</button>
+            <button onclick="showApp('games')" id="nav-games">Games</button>
+            <button onclick="showApp('websites')" id="nav-websites">Websites</button>
+            <!-- Settings Button (Gear Icon) -->
+            <button id="settingsButton" title="Settings">⚙️</button>
+            <!-- Panic Button (Removed from nav, will be in settings) -->
+        </div>
+    </div>
+    <div class="main-content">
+        <!-- Home App -->
+        <div class="app-container active" id="app-home"> <!-- Ensure Home is active by default -->
+            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; padding: 20px; background: linear-gradient(135deg, #74ebd5, #ACB6E5);">
+                <h2 style="color: #333; margin-bottom: 30px;">Welcome to the Crisis Unblocker</h2> <!-- Changed Text -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; width: 80%;">
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="showApp('youtube')">
+                        <img src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo.png" alt="YouTube" style="width: 80px; height: 45px; margin-bottom: 15px;">
+                        <h3>YouTube</h3>
+                        <p>Search and watch videos</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="showApp('chatgpt')">
+                        <img src="https://avatars.githubusercontent.com/u/141221163?v=4" alt="ChatGPT" style="width: 80px; height: 80px; margin-bottom: 15px; border-radius: 50%;">
+                        <h3>ChatGPT</h3>
+                        <p>AI-powered conversations</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="showApp('games')">
+                        <img src="https://www.svgrepo.com/show/25606/unblocked-padlock.svg" alt="Games" style="width: 80px; height: 80px; margin-bottom: 15px;">
+                        <h3>Unblocked Games</h3>
+                        <p>Play games anytime, anywhere</p>
+                    </div>
+                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="showApp('websites')">
+                        <img src="https://cdn-icons-png.flaticon.com/256/4659/4659860.png" alt="Websites" style="width: 80px; height: 80px; margin-bottom: 15px;">
+                        <h3>Website Loader</h3>
+                        <p>Browse any website</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- YouTube App - Updated with working version -->
+        <div class="app-container youtube-app" id="app-youtube">
+            <div class="youtube-container">
+                <div class="youtube-header">
+                    <h1 onclick="window.location.reload();" style="cursor: pointer;">
+                        <img src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo.png" alt="YouTube Logo" width="100" height="56">
+                    </h1>
+                </div>
+                <div class="search-form">
+                    <input type="text" id="searchQuery" placeholder="Enter search query">
+                    <button onclick="searchVideos()">Search</button>
+                </div>
+                <div id="searchResults" class="video-grid">
+                    <!-- Videos will be loaded here -->
+                </div>
+                <div class="button-container">
+                    <button class="button" id="backButton" onclick="loadPreviousVideos()" disabled>Back</button>
+                    <button class="button" id="nextButton" onclick="loadMoreVideos()">Next</button>
+                </div>
+                <div class="video-player-container">
+                    <div class="video-player" id="videoPlayer">
+                        <!-- Video will be loaded here -->
+                    </div>
+                    <div class="video-paste-form">
+                        <input type="text" id="videoIdInput" placeholder="Paste YouTube URL or video ID">
+                        <button onclick="playVideoFromInput()">Play</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Removed duplicate footer from YouTube app -->
+        </div>
+        <!-- ChatGPT App -->
+        <div class="app-container" id="app-chatgpt">
+            <iframe src="https://chat.qwen.ai/"></iframe>
+        </div>
+        <!-- Games App -->
+        <div class="app-container" id="app-games">
+            <iframe src="https://geography-lessons-5.pro/#google_vignette"></iframe>
+        </div>
+        <!-- Website Loader App -->
+        <div class="app-container website-loader-app" id="app-websites">
+            <h1>Website Loader</h1>
+            <form id="loadForm" onsubmit="loadWebsite(); return false;">
+                <input type="text" id="urlInput" placeholder="Enter website URL" required>
+                <input type="submit" value="Load Website">
+                <button type="button" onclick="saveWebsite()">Save Website</button>
+                <button type="button" onclick="toggleFullScreen()">Full Screen</button>
+            </form>
+            <div id="errorMessage">Failed to load website. Please try another URL.</div>
+            <div id="iframeContainer">
+                <iframe id="webFrame" src=""></iframe>
+            </div>
+            <div id="savedUrls">
+                <h3>Saved Websites</h3>
+                <ul id="urlList"></ul>
+            </div>
+        </div>
+    </div>
+    <footer>
+        All apps contained in a single file
+    </footer>
+     <!-- Settings Menu Overlay -->
+    <div id="overlay" onclick="closeSettings()"></div>
+    <!-- Settings Menu -->
+    <div id="settingsMenu">
+        <div id="settingsMenuHeader">
+            <span>Settings</span>
+            <span style="cursor: pointer;" onclick="closeSettings()">✕</span>
+        </div>
+        <div id="settingsMenuContent">
+            <div id="settingsMenuTabs">
+                <button class="settings-tab-button active" data-tab="main">Main Settings</button>
+                <button class="settings-tab-button" data-tab="file">File (Dev)</button> <!-- New File Tab -->
+                <button class="settings-tab-button" data-tab="patch">Patch Notes</button> <!-- New Patch Notes Tab -->
+                <!-- Add more tabs here if needed -->
+            </div>
+            <div id="settingsMenuPanels">
+                <!-- Main Settings Panel -->
+                <div class="settings-panel active" id="main-settings-panel">
+                    <h2>Main Settings</h2>
+                    <label for="pageTitle">Page Title:</label>
+                    <input type="text" id="pageTitle" placeholder="Enter new page title" style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                    <label for="faviconUrl">Favicon URL:</label>
+                    <input type="url" id="faviconUrl" placeholder="Enter new favicon URL (e.g., https://example.com/favicon.ico)" style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                    <!-- Panic Button inside Main Settings -->
+                    <button id="panicButton" onclick="triggerPanic()" style="padding: 10px 15px; background-color: #ff9800; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 20px;">Panic Button (Redirect to Google Classroom)</button>
+                </div>
+                <!-- File (Dev) Settings Panel - Contains the HTML Code Runner -->
+                <div class="settings-panel" id="file-settings-panel">
+                    <h2>File Editor (Developer Tool)</h2>
+                    <p style="color: #666; margin-bottom: 15px;">Create and run HTML code directly within the browser.</p>
+                    <!-- Embedded HTML Code Runner -->
+                    <div class="code-runner-container">
+                        <div class="code-runner-main-content">
+                            <div class="code-runner-editors-container">
+                                <div class="code-runner-editor-section" style="flex: 3;">
+                                    <div class="code-runner-editor-header">
+                                        <span>HTML</span>
+                                        <button id="fullscreenBtn" onclick="toggleFullscreen()" style="float: right; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; background-color: #3498db; color: white; border: none; cursor: pointer;">⛶</button>
+                                    </div>
+                                    <textarea class="code-runner-textarea" id="html-code-runner" placeholder="Enter your HTML here..."><!DOCTYPE html>
+<html>
+<head>
+    <title>My Web Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Website</h1>
+    <p>This is a sample page created with HTML and CSS. Click the button below to see some JavaScript in action!</p>
+    <button class="btn" onclick="showMessage()">Click Me!</button>
+    <div id="output"></div>
+</body>
+</html></textarea>
+                                </div>
+                                <div class="code-runner-preview-container" style="flex: 2;">
+                                    <div class="code-runner-preview-header">
+                                        <span>Preview</span>
+                                    </div>
+                                    <iframe id="preview-frame-runner"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="code-runner-controls">
+                            <button id="run-btn-runner" class="code-runner-btn code-runner-run-btn">
+                                <span>▶️ Run Code</span>
+                            </button>
+                            <button id="clear-btn-runner" class="code-runner-btn code-runner-clear-btn">
+                                <span>🗑️ Clear All</span>
+                            </button>
+                            <button id="save-btn-runner" class="code-runner-btn code-runner-save-btn">
+                                <span>💾 Save to Browser</span>
+                            </button>
+                            <button id="save-file-btn-runner" class="code-runner-btn code-runner-save-file-btn">
+                                <span>💾 Save to File</span>
+                            </button>
+                        </div>
+                    </div>
+                     <!-- End Embedded HTML Code Runner -->
+                </div>
+                <!-- End File Settings Panel -->
+                <!-- Patch Notes Settings Panel -->
+                <div class="settings-panel" id="patch-settings-panel">
+                    <h2>Patch Notes</h2>
+                    <div class="patch-notes-content">
+                        <h3>Version 1.1 (Current)</h3>
+                        <ul>
+                            <li><strong>Title Change:</strong> Application title changed from "Multi-App Portal" to "Crisis Unblocker".</li>
+                            <li><strong>Settings Menu:</strong> Added a dedicated settings menu accessible via a gear icon (⚙️) in the header.</li>
+                            <li><strong>Customization:</strong> Settings menu allows users to change the page/tab title and favicon dynamically.</li>
+                            <li><strong>Panic Button:</strong> Added a "Panic Button" within the settings menu that redirects the user to Google Classroom (<code>https://classroom.google.com/h</code>).</li>
+                            <li><strong>Developer Tools:</strong> Integrated the "HTML Code Runner" tool into a new "File (Dev)" section within the settings menu.</li>
+                            <li><strong>UI Improvements:</strong> Refined the overall layout and styling of the main portal and integrated applications.</li>
+                            <li><strong>Code Structure:</strong> Refactored code for better organization and maintainability.</li>
+                        </ul>
+                        <h3>Version 1.0 (Original)</h3>
+                        <ul>
+                            <li><strong>Initial Release:</strong> Launched with core applications: Home, YouTube, ChatGPT, Unblocked Games, and Website Loader.</li>
+                            <li><strong>Basic Functionality:</strong> Provided access to various online tools and resources within a single interface.</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- End Patch Notes Settings Panel -->
+                <!-- Add more panels here if needed -->
+            </div>
+        </div>
+        <div id="settingsMenuFooter">
+            <button id="saveSettingsMain" onclick="saveSettings()">Save Changes</button>
+            <button id="closeSettingsMain" onclick="closeSettings()">Close</button>
+        </div>
+    </div>
+    <script>
+        // --- Original Portal JavaScript Logic ---
+        // Navigation Logic
+        function showApp(appName) {
+            // Hide all apps
+            document.querySelectorAll('.app-container').forEach(app => {
+                app.classList.remove('active');
+            });
+            // Show selected app
+            document.getElementById(`app-${appName}`).classList.add('active');
+            // Update active nav button
+            document.querySelectorAll('.nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`nav-${appName}`).classList.add('active');
+            // If YouTube is selected and it's the first time, load suggested videos
+            if (appName === 'youtube' && !window.youtubeInitialized) {
+                loadSuggestedVideos();
+                window.youtubeInitialized = true;
+            }
+            // Initialize Website Loader if selected
+            if (appName === 'websites') {
+                updateSavedUrls();
+            }
+        }
+        // Panic Button Functionality
+        function triggerPanic() {
+            window.location.href = 'https://classroom.google.com/h';
+        }
+        // Settings Menu Functionality
+        function openSettings() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('settingsMenu').style.display = 'flex'; // Use flex for new layout
+             // Load current settings into the input fields
+            document.getElementById('pageTitle').value = document.title;
+            document.getElementById('faviconUrl').value = document.getElementById('faviconTag').href;
+        }
+        function closeSettings() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('settingsMenu').style.display = 'none';
+        }
+        function saveSettings() {
+            const newTitle = document.getElementById('pageTitle').value.trim();
+            const newFaviconUrl = document.getElementById('faviconUrl').value.trim();
+            if (newTitle) {
+                document.title = newTitle;
+                // Optionally update the header title if desired
+                // document.querySelector('.header h1').textContent = newTitle;
+            }
+            if (newFaviconUrl) {
+                // Update the existing favicon link tag
+                document.getElementById('faviconTag').href = newFaviconUrl;
+            }
+            // Save settings to localStorage for persistence (optional)
+            localStorage.setItem('customPageTitle', newTitle);
+            localStorage.setItem('customFaviconUrl', newFaviconUrl);
+            alert('Settings saved!');
+        }
+        // Settings Tab Switching
+        document.querySelectorAll('.settings-tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and panels
+                document.querySelectorAll('.settings-tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.settings-panel').forEach(panel => panel.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                // Show the corresponding panel
+                const tabName = button.getAttribute('data-tab');
+                document.getElementById(`${tabName}-settings-panel`).classList.add('active');
+            });
+        });
+        // Load saved settings on page load (optional)
+        window.addEventListener('load', function() {
+             const savedTitle = localStorage.getItem('customPageTitle');
+             const savedFavicon = localStorage.getItem('customFaviconUrl');
+             if (savedTitle) {
+                 document.title = savedTitle;
+                 // document.querySelector('.header h1').textContent = savedTitle; // Update header if needed
+             }
+             if (savedFavicon) {
+                 document.getElementById('faviconTag').href = savedFavicon;
+             }
+             // Initialize Website Loader if it's the active app
+             if (document.getElementById('app-websites').classList.contains('active')) {
+                 updateSavedUrls();
+             }
+        });
+        // YouTube App Logic (Updated with working version)
+        var apiKey = 'AIzaSyCjS-8uAsUI-BXrKDmfYzQL6zENsEepOJ8';
+        var nextPageToken = '';
+        var prevPageTokens = [];
+        var displayedVideoIds = new Set();
+        var currentQuery = '';
+        // Load suggested videos on initialization
+        function loadSuggestedVideos() {
+            fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=8&key=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    nextPageToken = data.nextPageToken;
+                    displayVideos(data.items);
+                })
+                .catch(error => console.error('Error fetching suggested videos:', error));
+        }
+        function displayVideos(videos) {
+            var searchResultsContainer = document.getElementById('searchResults');
+            searchResultsContainer.innerHTML = '';
+            videos.forEach(video => {
+                var videoId = video.id.videoId || video.id;
+                var videoTitle = video.snippet.title;
+                var videoDescription = video.snippet.description;
+                var thumbnailUrl = video.snippet.thumbnails.medium.url;
+                if (!displayedVideoIds.has(videoId)) {
+                    displayedVideoIds.add(videoId);
+                    var videoElement = document.createElement('div');
+                    videoElement.classList.add('video-item');
+                    videoElement.innerHTML = `
+                        <div class="video-thumbnail">
+                            <img src="${thumbnailUrl}" alt="${videoTitle}">
+                        </div>
+                        <div class="video-details">
+                            <h3 class="video-title">${videoTitle}</h3>
+                            <p class="video-description">${videoDescription}</p>
+                        </div>
+                    `;
+                    videoElement.addEventListener('click', function () {
+                        embedVideo(videoId);
+                    });
+                    searchResultsContainer.appendChild(videoElement);
+                }
+            });
+            document.getElementById('backButton').disabled = prevPageTokens.length === 0;
+        }
+        function embedVideo(videoId) {
+            var searchResultsContainer = document.getElementById('searchResults');
+            searchResultsContainer.innerHTML = '';
+            var videoPlayerContainer = document.getElementById('videoPlayer');
+            videoPlayerContainer.innerHTML = `
+                <div class="embed-container">
+                    <iframe src="https://www.yout-ube.com/embed/${videoId}"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            `;
+            var likeButtonContainer = document.createElement('div');
+            likeButtonContainer.classList.add('like-button');
+            likeButtonContainer.innerHTML = `
+                <button id="likeButton" onclick="simulateLike()" disabled style="margin-top: 10px; padding: 10px 20px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    <img src="https://img.icons8.com/fluency-systems-filled/24/000000/thumb-up.png" style="vertical-align: middle; margin-right: 5px;"/>
+                    <span id="likeCount">Loading...</span>
+                </button>
+            `;
+            videoPlayerContainer.appendChild(likeButtonContainer);
+            fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.items && data.items.length > 0) {
+                        var likeCount = data.items[0].statistics.likeCount;
+                        document.getElementById('likeCount').textContent = likeCount;
+                        document.getElementById('likeButton').disabled = false;
+                    } else {
+                        document.getElementById('likeCount').textContent = 'N/A';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching like count:', error);
+                    document.getElementById('likeCount').textContent = 'Error';
+                });
+            document.getElementById('backButton').style.display = 'none';
+            document.getElementById('nextButton').style.display = 'none';
+        }
+        function simulateLike() {
+            alert('Like simulated! (This is a demo)');
+        }
+        function playVideoFromInput() {
+            var input = document.getElementById('videoIdInput').value.trim();
+            var videoId = extractVideoId(input);
+            if (videoId) {
+                embedVideo(videoId);
+            } else {
+                alert('Please enter a valid YouTube URL or video ID');
+            }
+        }
+        function extractVideoId(url) {
+            var patterns = [
+                /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/(?:embed\/|watch\?v=|v\/|\/)?([^\s&]+)/,
+                /^([A-Za-z0-9_-]{11})$/,
+            ];
+            for (var pattern of patterns) {
+                var match = url.match(pattern);
+                if (match) {
+                    return match[1];
+                }
+            }
+            return null;
+        }
+        function searchVideos() {
+            var searchQuery = document.getElementById('searchQuery').value;
+            if (searchQuery) {
+                currentQuery = searchQuery;
+                nextPageToken = '';
+                prevPageTokens = [];
+                displayedVideoIds.clear();
+                fetchVideos(searchQuery);
+            } else {
+                alert('Please enter a search query');
+            }
+        }
+        function fetchVideos(searchQuery) {
+            fetch(`https://www.googleapis.com/youtube/v3/search?q=${searchQuery}&part=snippet&type=video&maxResults=8&pageToken=${nextPageToken}&key=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (nextPageToken) {
+                        prevPageTokens.push(nextPageToken);
+                    }
+                    nextPageToken = data.nextPageToken;
+                    displayVideos(data.items);
+                })
+                .catch(error => console.error('Error fetching search results:', error));
+        }
+        function loadMoreVideos() {
+            if (nextPageToken) {
+                fetchVideos(currentQuery);
+            }
+        }
+        function loadPreviousVideos() {
+            if (prevPageTokens.length > 0) {
+                nextPageToken = prevPageTokens.pop();
+                fetchVideos(currentQuery);
+            }
+        }
+        // Website Loader App Logic (Embedded)
+        function loadWebsite() {
+            var url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                alert("Please enter a valid URL.");
+                return;
+            }
+            // Improved URL validation
+            if (!/^https?:\/\//i.test(url)) {
+                url = 'http://' + url;
+            }
+            document.getElementById('webFrame').src = url;
+            // Reset error message
+            hideErrorMessage();
+            // Check if the URL is valid after setting it
+            checkUrl(url);
+        }
+        function checkUrl(url) {
+            const iframe = document.getElementById('webFrame');
+            iframe.onload = function() {
+                hideErrorMessage();
+            };
+            iframe.onerror = function() {
+                showErrorMessage();
+            };
+            iframe.src = url; // Set the URL after defining the onload and onerror
+        }
+        function saveWebsite() {
+            var url = document.getElementById('urlInput').value.trim();
+            if (!url) {
+                alert("Please enter a valid URL.");
+                return;
+            }
+            if (!/^https?:\/\//i.test(url)) {
+                url = 'http://' + url;
+            }
+            let savedUrls = JSON.parse(localStorage.getItem('savedUrls')) || [];
+            if (!savedUrls.includes(url)) {
+                savedUrls.push(url);
+                localStorage.setItem('savedUrls', JSON.stringify(savedUrls));
+                updateSavedUrls();
+            } else {
+                alert("This website is already saved.");
+            }
+        }
+        function updateSavedUrls() {
+            let savedUrls = JSON.parse(localStorage.getItem('savedUrls')) || [];
+            let urlList = document.getElementById('urlList');
+            urlList.innerHTML = ''; // Clear current list
+            savedUrls.forEach((url, index) => {
+                let listItem = document.createElement('li');
+                listItem.classList.add('url-item');
+                listItem.innerHTML = `<a href="#" onclick="loadSavedWebsite('${url}'); return false;">${url}</a> <button onclick="deleteWebsite(${index})">Delete</button>`;
+                urlList.appendChild(listItem);
+            });
+        }
+        function loadSavedWebsite(url) {
+             document.getElementById('urlInput').value = url; // Optional: fill input
+            document.getElementById('webFrame').src = url;
+        }
+        function deleteWebsite(index) {
+            let savedUrls = JSON.parse(localStorage.getItem('savedUrls')) || [];
+            savedUrls.splice(index, 1);
+            localStorage.setItem('savedUrls', JSON.stringify(savedUrls));
+            updateSavedUrls();
+        }
+        function toggleFullScreen() {
+            var iframe = document.getElementById('iframeContainer');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.mozRequestFullScreen) { // Firefox
+                iframe.mozRequestFullScreen();
+            } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { // IE/Edge
+                iframe.msRequestFullscreen();
+            }
+        }
+        function showErrorMessage() {
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+        function hideErrorMessage() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+        // --- Embedded HTML Code Runner JavaScript Logic ---
+        // Encapsulate Code Runner logic to avoid conflicts
+        (function() {
+            // Wait for the DOM to be fully loaded, including settings menu content
+            document.addEventListener('DOMContentLoaded', function() {
+                // Check if the Code Runner elements exist (they should now be part of the DOM when settings are opened)
+                // We'll initialize the runner logic when the 'File' tab is first opened.
+                // This avoids running the logic unnecessarily on initial page load.
+                let runnerInitialized = false;
+                // Override the settings tab switching to initialize the runner
+                // Find the File tab button(s) - using querySelectorAll to be safe if there are multiple ways to select it
+                const fileTabButtons = document.querySelectorAll('.settings-tab-button[data-tab="file"]');
+                fileTabButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                         // Remove active class from all buttons and panels
+                        document.querySelectorAll('.settings-tab-button').forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('.settings-panel').forEach(panel => panel.classList.remove('active'));
+                        // Add active class to clicked button
+                        button.classList.add('active');
+                        // Show the corresponding panel
+                        const tabName = button.getAttribute('data-tab');
+                        document.getElementById(`${tabName}-settings-panel`).classList.add('active');
+                        // Initialize runner if not already done
+                        if (!runnerInitialized && tabName === 'file') {
+                            initCodeRunner();
+                            runnerInitialized = true;
+                        }
+                    });
+                });
+                function initCodeRunner() {
+                    // Load saved code if available (for the runner)
+                    loadSavedCodeRunner();
+                    // Run code initially for the runner
+                    runCodeRunner();
+                    // Event listeners for the runner
+                    document.getElementById('run-btn-runner').addEventListener('click', runCodeRunner);
+                    document.getElementById('clear-btn-runner').addEventListener('click', clearAllRunner);
+                    document.getElementById('save-btn-runner').addEventListener('click', saveCodeToBrowserRunner);
+                    document.getElementById('save-file-btn-runner').addEventListener('click', saveCodeToFileRunner);
+                    // Keyboard shortcut (Ctrl+Enter) for the runner
+                    // Note: This might conflict with other parts of the portal if not careful.
+                    // A more robust solution would scope the listener to the runner's textareas.
+                    document.addEventListener('keydown', function(event) {
+                        if (event.ctrlKey && event.key === 'Enter' && document.getElementById('file-settings-panel').classList.contains('active')) {
+                            runCodeRunner();
+                        }
+                    });
+                    // Make preview resizable - Simplified or omitted for integration
+                    // makeResizableRunner(); // Optional: Implement if needed
+                }
+                // Helper function to escape HTML (if needed, though not always for iframe srcdoc)
+                // function escapeHtml(unsafe) {
+                //     if (typeof unsafe !== 'string') return unsafe;
+                //     return unsafe
+                //         .replace(/&/g, "&amp;")
+                //         .replace(/</g, "<")
+                //         .replace(/>/g, ">")
+                //         .replace(/"/g, "&quot;")
+                //         .replace(/'/g, "&#039;");
+                // }
+                function runCodeRunner() {
+                    const htmlCode = document.getElementById('html-code-runner').value;
+                    const previewFrame = document.getElementById('preview-frame-runner');
+                    // Combine all code into a complete HTML document
+                    // Using srcdoc is generally safer and simpler for this kind of preview
+                    const fullHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview</title>
+</head>
+<body>
+    ${htmlCode}
+</body>
+</html>
+                    `;
+                    // Use srcdoc for the preview
+                    previewFrame.srcdoc = fullHtml;
+                }
+                function clearAllRunner() {
+                    if (confirm('Are you sure you want to clear all code in the runner?')) {
+                        document.getElementById('html-code-runner').value = '';
+                        // Clear preview
+                        const previewFrame = document.getElementById('preview-frame-runner');
+                        previewFrame.srcdoc = '';
+                    }
+                }
+                function saveCodeToBrowserRunner() {
+                    localStorage.setItem('htmlCodeRunner', document.getElementById('html-code-runner').value);
+                    alert('Code saved to browser storage successfully!');
+                }
+                function saveCodeToFileRunner() {
+                    const htmlCode = document.getElementById('html-code-runner').value;
+                    let fullHtml = `<!DOCTYPE html>
+<html>
+<head>
+    <title>My Web Page</title>
+</head>
+<body>
+${htmlCode}
+</body>
+</html>`;
+                    const blob = new Blob([fullHtml], { type: 'text/html' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = 'my-webpage.html';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    alert('HTML file saved successfully!');
+                }
+                function loadSavedCodeRunner() {
+                    const savedHtml = localStorage.getItem('htmlCodeRunner');
+                    if (savedHtml) document.getElementById('html-code-runner').value = savedHtml;
+                }
+                // Optional: Implement resizable preview if needed
+                // function makeResizableRunner() { ... }
+            }); // End DOMContentLoaded for Runner
+        })(); // End IIFE for Runner
+        // Attach the openSettings function to the gear button
+        document.getElementById('settingsButton').addEventListener('click', openSettings);
+
+        // Fullscreen functionality for the code runner
+        function toggleFullscreen() {
+            const runnerContainer = document.querySelector('.code-runner-container');
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            
+            if (!document.fullscreenElement) {
+                // Request fullscreen for the entire runner container
+                if (runnerContainer.requestFullscreen) {
+                    runnerContainer.requestFullscreen();
+                    fullscreenBtn.textContent = '✕';
+                } else if (runnerContainer.mozRequestFullScreen) {
+                    runnerContainer.mozRequestFullScreen();
+                    fullscreenBtn.textContent = '✕';
+                } else if (runnerContainer.webkitRequestFullscreen) {
+                    runnerContainer.webkitRequestFullscreen();
+                    fullscreenBtn.textContent = '✕';
+                } else if (runnerContainer.msRequestFullscreen) {
+                    runnerContainer.msRequestFullscreen();
+                    fullscreenBtn.textContent = '✕';
+                }
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    fullscreenBtn.textContent = '⛶';
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                    fullscreenBtn.textContent = '⛶';
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                    fullscreenBtn.textContent = '⛶';
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                    fullscreenBtn.textContent = '⛶';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
