@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Launcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            max-width: 100%;
+            height: 90vh;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .app-tile {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+        }
+
+        .app-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .app-icon {
+            width: 60%;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .app-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #fff;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-label {
+            font-size: 0.7em;
+            margin-top: 3px;
+        }
+
+        iframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px); /* Account for nav bar */
+            border: none;
+            display: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- YouTube -->
+        <div class="app-tile" onclick="loadApp('YouTube', 'https://www.youtube.com')">
+            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube" class="app-icon">
+            <span class="app-name">YouTube</span>
+        </div>
+
+        <!-- Gmail -->
+        <div class="app-tile" onclick="loadApp('Gmail', 'https://mail.google.com')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" alt="Gmail" class="app-icon">
+            <span class="app-name">Gmail</span>
+        </div>
+
+        <!-- Google Drive -->
+        <div class="app-tile" onclick="loadApp('Drive', 'https://drive.google.com')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968927.png" alt="Google Drive" class="app-icon">
+            <span class="app-name">Drive</span>
+        </div>
+
+        <!-- Google Docs -->
+        <div class="app-tile" onclick="loadApp('Docs', 'https://docs.google.com')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968904.png" alt="Google Docs" class="app-icon">
+            <span class="app-name">Docs</span>
+        </div>
+
+        <!-- Google Sheets -->
+        <div class="app-tile" onclick="loadApp('Sheets', 'https://sheets.google.com')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968936.png" alt="Google Sheets" class="app-icon">
+            <span class="app-name">Sheets</span>
+        </div>
+
+        <!-- Messages -->
+        <div class="app-tile" onclick="loadApp('Messages', 'https://pulsetext.lovable.app')">
+            <img src="https://www.clipartmax.com/png/middle/207-2074188_texting-on-phones-icon-free-icons-download-twitter-logo-for-html.png" alt="Messages" class="app-icon">
+            <span class="app-name">Messages</span>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-item" onclick="showHome()">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'/%3E%3C/svg%3E" class="nav-icon">
+            <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item" onclick="loadApp('YouTube', 'https://www.youtube.com')">
+            <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="nav-icon">
+            <span class="nav-label">YouTube</span>
+        </div>
+        <div class="nav-item" onclick="loadApp('Gmail', 'https://mail.google.com')">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" class="nav-icon">
+            <span class="nav-label">Gmail</span>
+        </div>
+        <div class="nav-item" onclick="loadApp('Messages', 'https://pulsetext.lovable.app')">
+            <img src="https://www.clipartmax.com/png/middle/207-2074188_texting-on-phones-icon-free-icons-download-twitter-logo-for-html.png" class="nav-icon">
+            <span class="nav-label">Messages</span>
+        </div>
+    </div>
+
+    <!-- Iframes for apps -->
+    <iframe id="youtube-frame" src="about:blank"></iframe>
+    <iframe id="gmail-frame" src="about:blank"></iframe>
+    <iframe id="drive-frame" src="about:blank"></iframe>
+    <iframe id="docs-frame" src="about:blank"></iframe>
+    <iframe id="sheets-frame" src="about:blank"></iframe>
+    <iframe id="messages-frame" src="about:blank"></iframe>
+
+    <script>
+        // Show home screen initially
+        document.addEventListener('DOMContentLoaded', function() {
+            showHome();
+        });
+
+        function loadApp(name, url) {
+            // Hide all iframes first
+            const frames = document.querySelectorAll('iframe');
+            frames.forEach(frame => frame.style.display = 'none');
+
+            // Determine which iframe to use based on app name
+            let frameId;
+            switch(name.toLowerCase()) {
+                case 'youtube':
+                    frameId = 'youtube-frame';
+                    break;
+                case 'gmail':
+                    frameId = 'gmail-frame';
+                    break;
+                case 'drive':
+                    frameId = 'drive-frame';
+                    break;
+                case 'docs':
+                    frameId = 'docs-frame';
+                    break;
+                case 'sheets':
+                    frameId = 'sheets-frame';
+                    break;
+                case 'messages':
+                    frameId = 'messages-frame';
+                    break;
+                default:
+                    frameId = 'youtube-frame'; // Default fallback
+            }
+
+            // Load the app in the selected iframe
+            const frame = document.getElementById(frameId);
+            frame.src = url;
+            frame.style.display = 'block';
+            
+            // Hide the app container
+            document.querySelector('.app-container').style.display = 'none';
+        }
+
+        function showHome() {
+            // Hide all iframes
+            const frames = document.querySelectorAll('iframe');
+            frames.forEach(frame => frame.style.display = 'none');
+            
+            // Show the app container
+            document.querySelector('.app-container').style.display = 'grid';
+        }
+    </script>
+</body>
+</html>

@@ -1,3 +1,9 @@
 ```
+# Backup files
 *.bak
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
 ```
