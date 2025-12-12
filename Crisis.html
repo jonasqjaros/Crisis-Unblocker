@@ -1,794 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crisis Unblocker</title> <!-- Changed Title -->
-    <link rel="icon" id="faviconTag" href="https://cdn-icons-png.freepik.com/512/9073/9073363.png" type="image/png"> <!-- Added ID for favicon tag -->
-    <style>
-        /* --- Original Portal Styles --- */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .header {
-            background-color: #4285f4;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header h1 {
-            margin: 0;
-            cursor: pointer;
-        }
-        .nav {
-            display: flex;
-            gap: 15px;
-            align-items: center; /* Align items vertically */
-        }
-        .nav button {
-            padding: 8px 16px;
-            background-color: white;
-            color: #4285f4;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .nav button:hover {
-            background-color: #e8e8e8;
-        }
-        .nav button.active {
-            background-color: #3367d6;
-            color: white;
-        }
-        /* Gear Icon Button */
-        #settingsButton {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: background-color 0.3s;
-        }
-        #settingsButton:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        .main-content {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
-        .app-container {
-            width: 100%;
-            height: 100%;
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        .app-container.active {
-            display: block;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        /* YouTube App Styles */
-        .youtube-app {
-            background-color: #f9f9f9;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: auto;
-        }
-        .youtube-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .youtube-header {
-            background-color: #ffffff;
-            padding: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .video-item {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        .video-item:hover {
-            transform: translateY(-5px);
-        }
-        .video-thumbnail {
-            width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            position: relative;
-        }
-        .video-thumbnail img {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            object-fit: cover;
-        }
-        .video-details {
-            padding: 10px;
-        }
-        .video-title {
-            font-size: 18px;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        .video-description {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.5;
-            height: 60px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .search-form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-        .search-form input[type="text"] {
-            width: 70%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px 0 0 4px;
-            box-sizing: border-box;
-        }
-        .search-form button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            background-color: #333;
-            color: #fff;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-        }
-        .video-player-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .video-player {
-            width: 100%;
-            height: 400px;
-        }
-        .video-paste-form {
-            margin-top: 35px;
-        }
-        .video-paste-form input[type="text"] {
-            width: 60%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px 0 4px 0;
-            box-sizing: border-box;
-        }
-        .video-paste-form button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            background-color: #333;
-            color: #fff;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-        }
-        .button-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            background-color: #333;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        .button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .embed-container {
-            position: relative;
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-        }
-        .embed-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        /* Website Loader Styles */
-        .website-loader-app {
-            background-color: #f4f4f9;
-            color: #333;
-            padding: 20px;
-            height: calc(100% - 40px);
-            overflow-y: auto;
-        }
-        .website-loader-app h1 {
-            text-align: center;
-            color: #4a4a4a;
-            margin-bottom: 20px;
-        }
-        .website-loader-app form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .website-loader-app input[type="text"] {
-            width: 50%;
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            transition: border-color 0.3s ease;
-        }
-        .website-loader-app input[type="text"]:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-        .website-loader-app input[type="submit"], .website-loader-app button {
-            padding: 12px 20px;
-            font-size: 16px;
-            margin-left: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .website-loader-app input[type="submit"] {
-            background-color: #007bff;
-            color: white;
-        }
-        .website-loader-app input[type="submit"]:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-        .website-loader-app button {
-            background-color: #28a745;
-            color: white;
-        }
-        .website-loader-app button:hover {
-            background-color: #1e7e34;
-            transform: scale(1.05);
-        }
-        .website-loader-app #iframeContainer {
-            width: 100%;
-            height: 60vh;
-            margin-top: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-        .website-loader-app iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .website-loader-app #errorMessage {
-            text-align: center;
-            color: red;
-            margin-top: 10px;
-            display: none;
-        }
-        .website-loader-app #savedUrls {
-            margin-top: 30px;
-        }
-        .website-loader-app #savedUrls h3 {
-            text-align: center;
-            color: #4a4a4a;
-            margin-bottom: 15px;
-        }
-        .website-loader-app #urlList {
-            list-style: none;
-            padding: 0;
-        }
-        .website-loader-app .url-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #fff;
-            padding: 10px 15px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        .website-loader-app .url-item a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-        .website-loader-app .url-item a:hover {
-            color: #0056b3;
-        }
-        .website-loader-app .url-item button {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .website-loader-app .url-item button:hover {
-            background-color: #bd2130;
-            transform: scale(1.05);
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #f0f2f5;
-            color: #666;
-            font-size: 14px;
-        }
-        /* --- Settings Menu Styles --- */
-        #settingsMenu {
-            display: none; /* Start hidden - This is the key fix */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 0; /* Adjusted padding */
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            width: 95%;
-            height: 90%;
-            max-width: 1600px;
-            max-height: 90vh;
-            overflow: hidden; /* Prevent internal scrolling */
-            /* display: flex; */ /* Removed duplicate display property */
-            flex-direction: column;
-        }
-        #settingsMenuHeader {
-             background: linear-gradient(to right, #2c3e50, #4a6491);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        #settingsMenuContent {
-            flex: 1;
-            display: flex;
-            overflow: hidden; /* Contain internal scrolling */
-        }
-        #settingsMenuTabs {
-            width: 200px;
-            background-color: #f5f5f5;
-            border-right: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            padding-top: 10px;
-        }
-        .settings-tab-button {
-            padding: 12px 15px;
-            background: none;
-            border: none;
-            text-align: left;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            border-bottom: 1px solid #eee;
-        }
-        .settings-tab-button:hover {
-            background-color: #e9e9e9;
-        }
-        .settings-tab-button.active {
-            background-color: #4285f4;
-            color: white;
-        }
-        #settingsMenuPanels {
-            flex: 1;
-            overflow-y: auto; /* Allow scrolling for content */
-            padding: 20px;
-        }
-        .settings-panel {
-            display: none;
-        }
-        .settings-panel.active {
-            display: block;
-        }
-        #settingsMenuFooter {
-            padding: 10px 20px;
-            background-color: #f9f9f9;
-            border-top: 1px solid #ddd;
-            text-align: right;
-        }
-        #settingsMenuFooter button {
-            padding: 8px 15px;
-            margin-left: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        #saveSettings {
-            background-color: #4CAF50;
-            color: white;
-        }
-        #closeSettings {
-            background-color: #f44336;
-            color: white;
-        }
-        #saveSettings:hover {
-            background-color: #45a049;
-        }
-        #closeSettings:hover {
-            background-color: #da190b;
-        }
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-        /* --- Embedded HTML Code Runner Styles --- */
-        /* Minimal necessary styles adapted from HTML Code Runner */
-        .code-runner-container {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            background-color: #f8f9fa; /* Match portal background */
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-        }
-        .code-runner-header {
-            background: linear-gradient(to right, #3498db, #2c3e50);
-            color: white;
-            padding: 10px 15px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1rem;
-        }
-        .code-runner-main-content {
-            display: flex;
-            flex: 1;
-            padding: 10px;
-            gap: 10px;
-            overflow: hidden;
-        }
-        .code-runner-editors-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            min-width: 250px;
-        }
-        .code-runner-editor-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: white;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            position: relative;
-        }
-        .code-runner-editor-header {
-            background: linear-gradient(to right, #3498db, #2c3e50);
-            color: white;
-            padding: 8px 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .code-runner-textarea {
-            flex: 1;
-            padding: 10px;
-            font-family: 'Fira Code', 'Courier New', monospace;
-            font-size: 13px;
-            border: none;
-            resize: none;
-            outline: none;
-            background-color: #f8f9fa;
-            line-height: 1.4;
-        }
-        .code-runner-textarea:focus {
-            background-color: #fff;
-            box-shadow: inset 0 0 0 1px #3498db;
-        }
-        .code-runner-preview-container {
-            flex: 1.5;
-            display: flex;
-            flex-direction: column;
-            background: white;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            min-width: 300px;
-        }
-        .code-runner-preview-header {
-            background: linear-gradient(to right, #27ae60, #2c3e50);
-            color: white;
-            padding: 8px 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        #preview-frame-runner {
-            flex: 1;
-            width: 100%;
-            border: none;
-            background-color: white;
-        }
-        .code-runner-controls {
-            display: flex;
-            justify-content: center;
-            padding: 15px;
-            gap: 10px;
-            background-color: #f0f0f0;
-            border-top: 1px solid #ddd;
-        }
-        .code-runner-btn {
-            padding: 8px 15px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .code-runner-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        .code-runner-run-btn {
-            background: linear-gradient(to right, #27ae60, #2ecc71);
-            color: white;
-        }
-        .code-runner-clear-btn {
-            background: linear-gradient(to right, #e74c3c, #c0392b);
-            color: white;
-        }
-        .code-runner-save-btn {
-            background: linear-gradient(to right, #3498db, #2980b9);
-            color: white;
-        }
-        .code-runner-save-file-btn {
-            background: linear-gradient(to right, #9b59b6, #8e44ad);
-            color: white;
-        }
-        /* --- End Embedded Styles --- */
-         /* Patch Notes Styles */
-        .patch-notes-content {
-            max-height: 70vh; /* Limit height */
-            overflow-y: auto; /* Add scrollbar if needed */
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        .patch-notes-content h3 {
-            color: #2c3e50;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            margin-top: 20px;
-        }
-        .patch-notes-content ul {
-            padding-left: 20px;
-        }
-        .patch-notes-content li {
-            margin-bottom: 8px;
-        }
-
-        /* Fullscreen styles */
-        .code-runner-container:-webkit-full-screen {
-            width: 100%;
-            height: 100%;
-        }
-        .code-runner-container:-moz-full-screen {
-            width: 100%;
-            height: 100%;
-        }
-        .code-runner-container:fullscreen {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <title>My Web Page</title>
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/previews/020/964/377/non_2x/gmail-mail-icon-for-web-design-free-png.png" type="image/x-icon">
 </head>
 <body>
-    <div class="header">
-        <h1 onclick="showApp('home')">Crisis Unblocker</h1> <!-- Changed Title in Header -->
-        <div class="nav">
-            <button onclick="showApp('home')" class="active" id="nav-home">Home</button>
-            <button onclick="showApp('youtube')" id="nav-youtube">YouTube</button>
-            <button onclick="showApp('chatgpt')" id="nav-chatgpt">ChatGPT</button>
-            <button onclick="showApp('games')" id="nav-games">Games</button>
-            <button onclick="showApp('websites')" id="nav-websites">Websites</button>
-            <!-- Settings Button (Gear Icon) -->
-            <button id="settingsButton" title="Settings">⚙️</button>
-            <!-- Panic Button (Removed from nav, will be in settings) -->
-        </div>
-    </div>
-    <div class="main-content">
-        <!-- Home App -->
-        <div class="app-container active" id="app-home"> <!-- Ensure Home is active by default -->
-            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; padding: 20px; background: linear-gradient(135deg, #74ebd5, #ACB6E5);">
-                <h2 style="color: #333; margin-bottom: 30px;">Welcome to the Crisis Unblocker</h2> <!-- Changed Text -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; width: 80%;">
-                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="showApp('youtube')">
-                        <img src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo.png" alt="YouTube" style="width: 80px; height: 45px; margin-bottom: 15px;">
-                        <h3>YouTube</h3>
-                        <p>Search and watch videos</p>
-                    </div>
-                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="showApp('chatgpt')">
-                        <img src="https://avatars.githubusercontent.com/u/141221163?v=4" alt="ChatGPT" style="width: 80px; height: 80px; margin-bottom: 15px; border-radius: 50%;">
-                        <h3>ChatGPT</h3>
-                        <p>AI-powered conversations</p>
-                    </div>
-                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="showApp('games')">
-                        <img src="https://www.svgrepo.com/show/25606/unblocked-padlock.svg" alt="Games" style="width: 80px; height: 80px; margin-bottom: 15px;">
-                        <h3>Unblocked Games</h3>
-                        <p>Play games anytime, anywhere</p>
-                    </div>
-                    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer;" onclick="showApp('websites')">
-                        <img src="https://cdn-icons-png.flaticon.com/256/4659/4659860.png" alt="Websites" style="width: 80px; height: 80px; margin-bottom: 15px;">
-                        <h3>Website Loader</h3>
-                        <p>Browse any website</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- YouTube App - Updated with working version -->
-        <div class="app-container youtube-app" id="app-youtube">
-            <div class="youtube-container">
-                <div class="youtube-header">
-                    <h1 onclick="window.location.reload();" style="cursor: pointer;">
-                        <img src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo.png" alt="YouTube Logo" width="100" height="56">
-                    </h1>
-                </div>
-                <div class="search-form">
-                    <input type="text" id="searchQuery" placeholder="Enter search query">
-                    <button onclick="searchVideos()">Search</button>
-                </div>
-                <div id="searchResults" class="video-grid">
-                    <!-- Videos will be loaded here -->
-                </div>
-                <div class="button-container">
-                    <button class="button" id="backButton" onclick="loadPreviousVideos()" disabled>Back</button>
-                    <button class="button" id="nextButton" onclick="loadMoreVideos()">Next</button>
-                </div>
-                <div class="video-player-container">
-                    <div class="video-player" id="videoPlayer">
-                        <!-- Video will be loaded here -->
-                    </div>
-                    <div class="video-paste-form">
-                        <input type="text" id="videoIdInput" placeholder="Paste YouTube URL or video ID">
-                        <button onclick="playVideoFromInput()">Play</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Removed duplicate footer from YouTube app -->
-        </div>
-        <!-- ChatGPT App -->
-        <div class="app-container" id="app-chatgpt">
-            <iframe src="https://chat.qwen.ai/"></iframe>
-        </div>
-        <!-- Games App -->
-        <div class="app-container" id="app-games">
-            <iframe src="https://geography-lessons-5.pro/#google_vignette"></iframe>
-        </div>
-        <!-- Website Loader App -->
-        <div class="app-container website-loader-app" id="app-websites">
-            <h1>Website Loader</h1>
-            <form id="loadForm" onsubmit="loadWebsite(); return false;">
-                <input type="text" id="urlInput" placeholder="Enter website URL" required>
-                <input type="submit" value="Load Website">
-                <button type="button" onclick="saveWebsite()">Save Website</button>
-                <button type="button" onclick="toggleFullScreen()">Full Screen</button>
-            </form>
-            <div id="errorMessage">Failed to load website. Please try another URL.</div>
-            <div id="iframeContainer">
-                <iframe id="webFrame" src=""></iframe>
-            </div>
-            <div id="savedUrls">
-                <h3>Saved Websites</h3>
-                <ul id="urlList"></ul>
-            </div>
-        </div>
-    </div>
-    <footer>
-        All apps contained in a single file
-    </footer>
-     <!-- Settings Menu Overlay -->
-    <div id="overlay" onclick="closeSettings()"></div>
-    <!-- Settings Menu -->
-    <div id="settingsMenu">
-        <div id="settingsMenuHeader">
-            <span>Settings</span>
-            <span style="cursor: pointer;" onclick="closeSettings()">✕</span>
-        </div>
-        <div id="settingsMenuContent">
-            <div id="settingsMenuTabs">
-                <button class="settings-tab-button active" data-tab="main">Main Settings</button>
-                <button class="settings-tab-button" data-tab="file">File (Dev)</button> <!-- New File Tab -->
-                <button class="settings-tab-button" data-tab="patch">Patch Notes</button> <!-- New Patch Notes Tab -->
-                <!-- Add more tabs here if needed -->
-            </div>
-            <div id="settingsMenuPanels">
-                <!-- Main Settings Panel -->
-                <div class="settings-panel active" id="main-settings-panel">
-                    <h2>Main Settings</h2>
-                    <label for="pageTitle">Page Title:</label>
-                    <input type="text" id="pageTitle" placeholder="Enter new page title" style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
-                    <label for="faviconUrl">Favicon URL:</label>
-                    <input type="url" id="faviconUrl" placeholder="Enter new favicon URL (e.g., https://example.com/favicon.ico)" style="width: 100%; padding: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
-                    <!-- Panic Button inside Main Settings -->
-                    <button id="panicButton" onclick="triggerPanic()" style="padding: 10px 15px; background-color: #ff9800; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 20px;">Panic Button (Redirect to Google Classroom)</button>
-                </div>
-                <!-- File (Dev) Settings Panel - Contains the HTML Code Runner -->
-                <div class="settings-panel" id="file-settings-panel">
-                    <h2>File Editor (Developer Tool)</h2>
-                    <p style="color: #666; margin-bottom: 15px;">Create and run HTML code directly within the browser.</p>
-                    <!-- Embedded HTML Code Runner -->
-                    <div class="code-runner-container">
-                        <div class="code-runner-main-content">
-                            <div class="code-runner-editors-container">
-                                <div class="code-runner-editor-section" style="flex: 3;">
-                                    <div class="code-runner-editor-header">
-                                        <span>HTML</span>
-                                        <button id="fullscreenBtn" onclick="toggleFullscreen()" style="float: right; padding: 4px 8px; font-size: 0.8rem; border-radius: 4px; background-color: #3498db; color: white; border: none; cursor: pointer;">⛶</button>
-                                    </div>
-                                    <textarea class="code-runner-textarea" id="html-code-runner" placeholder="Enter your HTML here..."><!DOCTYPE html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Crisis Unblocker</title><link rel="icon" id="faviconTag" href="https://cdn-icons-png.freepik.com/512/9073/9073363.png" type="image/png"><style>body{font-family:'Arial',sans-serif;background-color:#f0f2f5;margin:0;padding:0;height:100vh;display:flex;flex-direction:column}.header{background-color:#4285f4;color:white;padding:15px 20px;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,.2);display:flex;justify-content:space-between;align-items:center}.header h1{margin:0;cursor:pointer}.nav{display:flex;gap:15px;align-items:center;position:relative}.nav button{padding:8px 16px;background-color:white;color:#4285f4;border:none;border-radius:4px;cursor:pointer;font-weight:700;transition:background-color .3s;position:relative}.nav button:hover{background-color:#e8e8e8}.nav button.active{background-color:#3367d6;color:white}.nav .close-btn{position:absolute;top:-5px;right:-5px;width:18px;height:18px;background-color:#ff4444;color:white;border:none;border-radius:50%;font-size:12px;cursor:pointer;display:none;z-index:10;line-height:18px;text-align:center;padding:0}.nav .close-btn:hover{background-color:#cc0000}.nav button.has-close .close-btn{display:block}#nav-home.has-close .close-btn{display:none}#settingsButton{background:0 0;border:0;color:white;font-size:24px;cursor:pointer;padding:5px;border-radius:50%;transition:background-color .3s}#settingsButton:hover{background-color:rgba(255,255,255,.2)}.main-content{flex:1;position:relative;overflow: auto; /* Changed from 'hidden' to 'auto' to allow horizontal scroll if needed */}.app-container{width:100%;height:100%;display:none;position:absolute;top:0;left:0}.app-container.active{display:block}iframe{width:100%;height:100%;border:0}.youtube-app{background-color:#f9f9f9;font-family:'Arial',sans-serif;margin:0;padding:0;height:100%;overflow:auto}.youtube-container{max-width:1200px;margin:0 auto;padding:20px}.youtube-header{background-color:#fff;padding:10px;text-align:center;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.1)}.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}.video-item{background-color:#fff;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,.1);overflow:hidden;cursor:pointer;transition:transform .2s ease}.video-item:hover{transform:translateY(-5px)}.video-thumbnail{width:100%;padding-top:56.25%;position:relative}.video-thumbnail img{width:100%;height:100%;position:absolute;top:0;left:0;object-fit:cover}.video-details{padding:10px}.video-title{font-size:18px;margin-bottom:5px;color:#333}.video-description{font-size:14px;color:#666;line-height:1.5;height:60px;overflow:hidden;text-overflow:ellipsis}.search-form{display:flex;justify-content:center;margin-bottom:20px;width:100%}.search-form input[type=text]{width:70%;padding:10px;font-size:16px;border:1px solid #ccc;border-radius:4px 0 0 4px;box-sizing:border-box}.search-form button{padding:10px 20px;font-size:16px;border:0;background-color:#333;color:#fff;border-radius:0 4px 4px 0;cursor:pointer}.video-player-container{margin-top:20px;text-align:center}.video-player{width:100%;height:400px}.video-paste-form{margin-top:35px}.video-paste-form input[type=text]{width:60%;padding:10px;font-size:16px;border:1px solid #ccc;border-radius:4px 0 4px 0;box-sizing:border-box}.video-paste-form button{padding:10px 20px;font-size:16px;border:0;background-color:#333;color:#fff;border-radius:0 4px 4px 0;cursor:pointer}.button-container{text-align:center;margin-top:20px}.button{padding:10px 20px;font-size:16px;border:0;background-color:#333;color:#fff;border-radius:4px;cursor:pointer;margin:5px}.button:disabled{background-color:#ccc;cursor:not-allowed}.embed-container{position:relative;width:100%;height:0;padding-bottom:56.25%}.embed-container iframe{position:absolute;top:0;left:0;width:100%;height:100%}.website-loader-app{background-color:#f8fafc;color:#1e293b;padding:24px;box-sizing: border-box; /* Ensure padding is included in width/height */ width: 100%; /* Explicitly set width to 100% */ height: calc(100% - 48px); /* Adjust height to account for padding */ overflow-y: auto; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;}.website-loader-app h1{text-align:center;color:#0f172a;margin-bottom:24px;font-weight:700}.website-loader-app form{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap; width: 100%; /* Ensure form takes full width */ box-sizing: border-box; /* Include padding/gap in width */}.website-loader-app input[type=text]{flex:1;min-width:280px;padding:12px 16px;font-size:16px;border:2px solid #cbd5e1;border-radius:8px;transition:border-color .3s,box-shadow .3s;background:white; box-sizing: border-box; /* Include padding in width */}.website-loader-app input[type=submit],.website-loader-app button{padding:12px 20px;font-size:15px;font-weight:600;border:0;border-radius:8px;cursor:pointer;transition:all .2s ease;white-space:nowrap; flex-shrink: 0; /* Prevent buttons from shrinking too much */}.website-loader-app input[type=submit]{background:linear-gradient(to right,#2563eb,#1d4ed8);color:white;box-shadow:0 2px 6px rgba(37,99,235,.3)}.website-loader-app input[type=submit]:hover{background:linear-gradient(to right,#1d4ed8,#1e40af);transform:translateY(-1px)}.website-loader-app button{background:linear-gradient(to right,#10b981,#059669);color:white;box-shadow:0 2px 6px rgba(16,185,129,.3)}.website-loader-app button:hover{background:linear-gradient(to right,#059669,#047857);transform:translateY(-1px)}.website-loader-app #iframeContainer{width:100%;height:60vh;margin-top:20px;border-radius:12px;overflow:hidden;box-shadow:0 6px 16px rgba(0,0,0,.12);border:1px solid #e2e8f0; box-sizing: border-box; /* Include border in width */}.website-loader-app iframe{width:100%;height:100%;border:0}.website-loader-app #errorMessage{text-align:center;color:#ef4444;margin-top:12px;font-weight:600;display:none}.website-loader-app #savedUrls{margin-top:32px; width: 100%; /* Ensure full width */ box-sizing: border-box; /* Include padding in width */}.website-loader-app #savedUrls h3{text-align:center;color:#334155;margin-bottom:16px;font-weight:600}.website-loader-app #urlList{list-style:none;padding:0; width: 100%; /* Ensure full width */ box-sizing: border-box; /* Include padding in width */}.website-loader-app .url-item{display:flex;justify-content:space-between;align-items:center;background:white;padding:14px 18px;margin-bottom:10px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #e2e8f0; width: 100%; /* Ensure full width */ box-sizing: border-box; /* Include padding in width */}.website-loader-app .url-item a{text-decoration:none;color:#2563eb;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.website-loader-app .url-item a:hover{color:#1d4ed8;text-decoration:underline}.website-loader-app .url-item button{background:linear-gradient(to right,#ef4444,#dc2626);color:white;border:0;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;margin-left:12px;min-width:70px}.website-loader-app .url-item button:hover{background:linear-gradient(to right,#dc2626,#b91c1c);transform:scale(1.03)}footer{text-align:center;padding:10px;background-color:#f0f2f5;color:#666;font-size:14px}#settingsMenu{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background-color:white;padding:0;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,.2);z-index:1000;width:95%;height:90%;max-width:1600px;max-height:90vh;overflow:hidden;flex-direction:column}#settingsMenuHeader{background:linear-gradient(to right,#2c3e50,#4a6491);color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;font-size:1.2rem;font-weight:700}#settingsMenuContent{flex:1;display:flex;overflow:hidden}#settingsMenuTabs{width:200px;background-color:#f5f5f5;border-right:1px solid #ddd;display:flex;flex-direction:column;padding-top:10px}.settings-tab-button{padding:12px 15px;background:0 0;border:0;text-align:left;cursor:pointer;transition:background-color .2s;border-bottom:1px solid #eee}.settings-tab-button:hover{background-color:#e9e9e9}.settings-tab-button.active{background-color:#4285f4;color:white}#settingsMenuPanels{flex:1;overflow-y:auto;padding:20px}.settings-panel{display:none}.settings-panel.active{display:block}#settingsMenuFooter{padding:10px 20px;background-color:#f9f9f9;border-top:1px solid #ddd;text-align:right}#settingsMenuFooter button{padding:8px 15px;margin-left:10px;border:0;border-radius:4px;cursor:pointer;font-weight:700}#saveSettings{background-color:#4CAF50;color:white}#closeSettings{background-color:#f44336;color:white}#saveSettings:hover{background-color:#45a049}#closeSettings:hover{background-color:#da190b}#overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,.5);z-index:999}.code-runner-container{height:100%;display:flex;flex-direction:column;background-color:#f8f9fa;border-radius:5px;overflow:hidden;box-shadow:inset 0 0 5px rgba(0,0,0,.1)}.code-runner-header{background:linear-gradient(to right,#3498db,#2c3e50);color:white;padding:10px 15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;font-size:1rem}.code-runner-main-content{display:flex;flex:1;padding:10px;gap:10px;overflow:hidden}.code-runner-editors-container{flex:1;display:flex;flex-direction:column;gap:10px;min-width:250px}.code-runner-editor-section{flex:1;display:flex;flex-direction:column;background:white;border-radius:5px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,.05);position:relative}.code-runner-editor-header{background:linear-gradient(to right,#3498db,#2c3e50);color:white;padding:8px 10px;font-weight:600;font-size:.9rem;display:flex;justify-content:space-between;align-items:center}.code-runner-textarea{flex:1;padding:10px;font-family:'Fira Code','Courier New',monospace;font-size:13px;border:0;resize:0;outline:0;background-color:#f8f9fa;line-height:1.4}.code-runner-textarea:focus{background-color:#fff;box-shadow:inset 0 0 0 1px #3498db}.code-runner-preview-container{flex:1.5;display:flex;flex-direction:column;background:white;border-radius:5px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,.05);min-width:300px}.code-runner-preview-header{background:linear-gradient(to right,#27ae60,#2c3e50);color:white;padding:8px 10px;font-weight:600;font-size:.9rem;display:flex;justify-content:space-between;align-items:center}#preview-frame-runner{flex:1;width:100%;border:0;background-color:white}.code-runner-controls{display:flex;justify-content:center;padding:15px;gap:10px;background-color:#f0f0f0;border-top:1px solid #ddd}.code-runner-btn{padding:8px 15px;font-size:.9rem;font-weight:600;border:0;border-radius:20px;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;gap:5px;box-shadow:0 2px 4px rgba(0,0,0,.1)}.code-runner-btn:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,.15)}.code-runner-run-btn{background:linear-gradient(to right,#27ae60,#2ecc71);color:white}.code-runner-clear-btn{background:linear-gradient(to right,#e74c3c,#c0392b);color:white}.code-runner-save-btn{background:linear-gradient(to right,#3498db,#2980b9);color:white}.code-runner-save-file-btn{background:linear-gradient(to right,#9b59b6,#8e44ad);color:white}.patch-notes-content{max-height:70vh;overflow-y:auto;padding:15px;background-color:#f9f9f9;border-radius:5px;border:1px solid #ddd}.patch-notes-content h3{color:#2c3e50;border-bottom:1px solid #eee;padding-bottom:5px;margin-top:20px}.patch-notes-content ul{padding-left:20px}.patch-notes-content li{margin-bottom:8px}.code-runner-container:-webkit-full-screen{width:100%;height:100%}.code-runner-container:-moz-full-screen{width:100%;height:100%}.code-runner-container:fullscreen{width:100%;height:100%}#custom-css-panel textarea{width:100%;height:200px;font-family:monospace;padding:10px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px;resize:vertical}.theme-option{margin-bottom:10px}.theme-option input[type=radio]{margin-right:8px}.theme-option label{cursor:pointer}.app-visibility-option{margin-bottom:10px}.app-visibility-option input[type=checkbox]{margin-right:8px}.app-visibility-option label{cursor:pointer}.system-info-item{margin-bottom:10px}.system-info-item strong{display:inline-block;width:150px}#exportData,#importData{width:100%;height:150px;font-family:monospace;padding:10px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px;resize:vertical}</style><div id="securitySplash" style="position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:99999;display:block"></div></head><body><div class="header"><h1 onclick="showApp('home')">Crisis Unblocker</h1><div class="nav"><button onclick="showApp('home')" class="active" id="nav-home">Home<span class="close-btn" onclick="closeApp('home',event)">✕</span></button><button onclick="showApp('youtube')" id="nav-youtube">YouTube<span class="close-btn" onclick="closeApp('youtube',event)">✕</span></button><button onclick="showApp('HEXA')" id="nav-HEXA">HEXA<span class="close-btn" onclick="closeApp('HEXA',event)">✕</span></button><button onclick="showApp('games')" id="nav-games">Games<span class="close-btn" onclick="closeApp('games',event)">✕</span></button><button onclick="showApp('websites')" id="nav-websites">Websites<span class="close-btn" onclick="closeApp('websites',event)">✕</span></button><button onclick="showApp('spotify')" id="nav-spotify">Spotify<span class="close-btn" onclick="closeApp('spotify',event)">✕</span></button><button id="settingsButton" title="Settings">⚙️</button></div></div><div class="main-content"><div class="app-container active" id="app-home"><div style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;text-align:center;padding:20px;background:linear-gradient(135deg,#74ebd5,#ACB6E5)"><h2 style="color:#333;margin-bottom:30px">Welcome to the Crisis Unblocker</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;width:80%"><div style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);cursor:pointer" onclick="showApp('youtube')"><img src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo.png" alt="YouTube" style="width:80px;height:45px;margin-bottom:15px"><h3>YouTube</h3><p>Search and watch videos</p></div><div style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);cursor:pointer" onclick="showApp('HEXA')"><img src="https://cdn-icons-png.flaticon.com/512/7239/7239994.png" alt="HEXA" style="width:80px;height:80px;margin-bottom:15px;border-radius:50%"><h3>HEXA</h3><p>Watch free movies and shows</p></div><div style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);cursor:pointer" onclick="showApp('games')"><img src="https://www.svgrepo.com/show/25606/unblocked-padlock.svg" alt="Games" style="width:80px;height:80px;margin-bottom:15px"><h3>Unblocked Games</h3><p>Play games anytime, anywhere</p></div><div style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);cursor:pointer" onclick="showApp('websites')"><img src="https://cdn-icons-png.flaticon.com/256/4659/4659860.png" alt="Websites" style="width:80px;height:80px;margin-bottom:15px"><h3>Website Loader</h3><p>Browse any website</p></div><div style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,.1);cursor:pointer" onclick="showApp('spotify')"><img src="https://m.media-amazon.com/images/I/51rttY7a+9L.png" alt="Spotify" style="width:80px;height:80px;margin-bottom:15px"><h3>Spotify</h3><p>Listen to music</p></div></div></div></div><div class="app-container youtube-app" id="app-youtube"><div class="youtube-container"><div class="youtube-header"><h1 onclick="loadSuggestedVideosLazy();" style="cursor:pointer"><img src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo.png" alt="YouTube Logo" width="100" height="56"></h1></div><div class="search-form"><input type="text" id="searchQuery" placeholder="Enter search query"><button onclick="searchVideos()">Search</button></div><div id="searchResults" class="video-grid"></div><div class="button-container"><button class="button" id="backButton" onclick="loadPreviousVideos()" disabled>Back</button><button class="button" id="nextButton" onclick="loadMoreVideos()">Next</button></div><div class="video-player-container"><div class="video-player" id="videoPlayer"></div><div class="video-paste-form"><input type="text" id="videoIdInput" placeholder="Paste YouTube URL or video ID"><button onclick="playVideoFromInput()">Play</button></div></div></div></div><div class="app-container" id="app-HEXA"><iframe src="" id="HEXAFrame"></iframe></div><div class="app-container" id="app-games"><iframe src="" id="gamesFrame"></iframe></div><div class="app-container website-loader-app" id="app-websites"><h1>Website Loader</h1><form id="loadForm" onsubmit="loadWebsite();return false"><input type="text" id="urlInput" placeholder="Enter website URL" required><input type="submit" value="Load Website"><button type="button" onclick="saveWebsite()">Save Website</button></form><div id="errorMessage">Failed to load website. Please try another URL.</div><div id="iframeContainer"><iframe id="webFrame" src=""></iframe></div><div id="savedUrls"><h3>Saved Websites</h3><ul id="urlList"></ul></div></div><div class="app-container" id="app-spotify"><iframe src="" id="spotifyFrame"></iframe></div></div><footer><div style="display:flex;justify-content:space-between;align-items:center;height:100%;"><span>All apps contained in a single file</span><button id="appFullscreenBtn" style="background:black;color:white;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;font-size:14px;cursor:pointer;padding:0;margin:0;" title="Fullscreen current app">⛶</button></div></footer><div id="overlay" onclick="closeSettings()"></div><div id="settingsMenu"><div id="settingsMenuHeader"><span>Settings</span><span style="cursor:pointer" onclick="closeSettings()">✕</span></div><div id="settingsMenuContent"><div id="settingsMenuTabs"><button class="settings-tab-button active" data-tab="main">Main Settings</button><button class="settings-tab-button" data-tab="appearance">Appearance</button><button class="settings-tab-button" data-tab="functionality">Functionality</button><button class="settings-tab-button" data-tab="ux">User Experience</button><button class="settings-tab-button" data-tab="info">Info & Diagnostics</button><button class="settings-tab-button" data-tab="file">File (Dev)</button><button class="settings-tab-button" data-tab="patch">Patch Notes</button></div><div id="settingsMenuPanels"><div class="settings-panel active" id="main-settings-panel"><h2>Main Settings</h2><label for="pageTitle">Page Title:</label><input type="text" id="pageTitle" placeholder="Enter new page title" style="width:100%;padding:8px;margin-bottom:15px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px"><label for="faviconUrl">Favicon URL:</label><input type="url" id="faviconUrl" placeholder="Enter new favicon URL (e.g., https://example.com/favicon.ico)" style="width:100%;padding:8px;margin-bottom:15px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px"><h3>Security Splash Screen</h3><label for="fallbackUrl">Fallback Redirect URL:</label><input type="url" id="fallbackUrl" placeholder="https://mail.google.com" style="width:100%;padding:8px;margin-bottom:15px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px"><label for="splashWaitTime">Wait Time (seconds):</label><input type="number" id="splashWaitTime" min="1" max="10" style="width:80px;padding:8px;margin-bottom:15px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px"><label for="requiredKeyCode">Required Key (e.g., Enter, Space, KeyA):</label><input type="text" id="requiredKeyCode" placeholder="Enter" style="width:100%;padding:8px;margin-bottom:15px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px"><p style="font-size:0.9em;color:#666;">Use standard <a href="https://keycode.info" target="_blank">KeyboardEvent.code</a> values (e.g., "Enter", "Space", "KeyK")</p><button id="panicButton" onclick="triggerPanic()" style="padding:10px 15px;background-color:#ff9800;color:white;border:0;border-radius:4px;cursor:pointer;font-weight:700;margin-top:20px">Panic Button (Redirect to Google Classroom)</button></div><div class="settings-panel" id="appearance-settings-panel"><h2>Appearance Settings</h2><h3>Theme</h3><div class="theme-option"><input type="radio" id="theme-default" name="theme" value="default"><label for="theme-default">Default (Blue)</label></div><div class="theme-option"><input type="radio" id="theme-dark" name="theme" value="dark"><label for="theme-dark">Dark Mode</label></div><div class="theme-option"><input type="radio" id="theme-green" name="theme" value="green"><label for="theme-green">Green Theme</label></div><div class="theme-option"><input type="radio" id="theme-purple" name="theme" value="purple"><label for="theme-purple">Purple Theme</label></div><h3>Custom CSS</h3><textarea id="customCSSInput" placeholder="Enter custom CSS here..."></textarea><button onclick="applyCustomCSS()">Apply Custom CSS</button></div><div class="settings-panel" id="functionality-settings-panel"><h2>Functionality Settings</h2><h3>App Initialization</h3><div class="app-visibility-option"><input type="checkbox" id="preload-youtube" name="preload-apps" value="youtube"><label for="preload-youtube">Pre-load YouTube on startup</label></div><div class="app-visibility-option"><input type="checkbox" id="preload-HEXA" name="preload-apps" value="HEXA"><label for="preload-HEXA">Pre-load HEXA on startup</label></div><div class="app-visibility-option"><input type="checkbox" id="preload-games" name="preload-apps" value="games"><label for="preload-games">Pre-load Games on startup</label></div><div class="app-visibility-option"><input type="checkbox" id="preload-websites" name="preload-apps" value="websites"><label for="preload-websites">Pre-load Website Loader on startup</label></div><div class="app-visibility-option"><input type="checkbox" id="preload-spotify" name="preload-apps" value="spotify"><label for="preload-spotify">Pre-load Spotify on startup</label></div><h3>Memory Management</h3><label for="maxDisplayedIds">Max YouTube Video IDs to Track:</label><input type="number" id="maxDisplayedIds" min="1" max="1000" value="100" style="width:60px;padding:5px;margin-bottom:15px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px"><label for="maxPrevTokens">Max YouTube Page Tokens to Track:</label><input type="number" id="maxPrevTokens" min="1" max="100" value="10" style="width:60px;padding:5px;margin-bottom:15px;box-sizing:border-box;border:1px solid #ccc;border-radius:4px"></div><div class="settings-panel" id="ux-settings-panel"><h2>User Experience Settings</h2><h3>Hide Apps</h3><div class="app-visibility-option"><input type="checkbox" id="hide-youtube" name="hide-apps" value="youtube"><label for="hide-youtube">Hide YouTube Tab</label></div><div class="app-visibility-option"><input type="checkbox" id="hide-HEXA" name="hide-apps" value="HEXA"><label for="hide-HEXA">Hide HEXA Tab</label></div><div class="app-visibility-option"><input type="checkbox" id="hide-games" name="hide-apps" value="games"><label for="hide-games">Hide Games Tab</label></div><div class="app-visibility-option"><input type="checkbox" id="hide-websites" name="hide-apps" value="websites"><label for="hide-websites">Hide Website Loader Tab</label></div><div class="app-visibility-option"><input type="checkbox" id="hide-spotify" name="hide-apps" value="spotify"><label for="hide-spotify">Hide Spotify Tab</label></div><h3>Advanced</h3><div class="app-visibility-option"><input type="checkbox" id="debugMode"><label for="debugMode">Enable Debug Mode (Console Logs)</label></div><button onclick="resetSettings()">Reset All Settings to Defaults</button></div><div class="settings-panel" id="info-settings-panel"><h2>Info & Diagnostics</h2><div class="system-info-item"><strong>User Agent:</strong><span id="userAgentInfo"></span></div><div class="system-info-item"><strong>Platform:</strong><span id="platformInfo"></span></div><div class="system-info-item"><strong>LocalStorage Size (approx):</strong><span id="localStorageSizeInfo"></span></div><div class="system-info-item"><strong>Active Apps (Loaded):</strong><span id="activeAppsInfo"></span></div><h3>Export/Import Settings</h3><p>Export your current settings to a file or import settings from a file.</p><textarea id="exportData" readonly></textarea><br><button onclick="exportSettings()">Export Settings</button><textarea id="importData" placeholder="Paste exported settings here..."></textarea><br><button onclick="importSettings()">Import Settings</button></div><div class="settings-panel" id="file-settings-panel"><h2>File Editor (Developer Tool)</h2><p style="color:#666;margin-bottom:15px">Create and run HTML code directly within the browser.</p><div class="code-runner-container"><div class="code-runner-main-content"><div class="code-runner-editors-container"><div class="code-runner-editor-section" style="flex:3"><div class="code-runner-editor-header"><span>HTML</span><button id="fullscreenBtn" onclick="toggleFullscreen()" style="float:right;padding:4px 8px;font-size:.8rem;border-radius:4px;background-color:#3498db;color:white;border:0;cursor:pointer">⛶</button></div><textarea class="code-runner-textarea" id="html-code-runner" placeholder="Enter your HTML here..."><!DOCTYPE html>
 <html>
 <head>
     <title>My Web Page</title>
@@ -832,447 +49,191 @@
     <button class="btn" onclick="showMessage()">Click Me!</button>
     <div id="output"></div>
 </body>
-</html></textarea>
-                                </div>
-                                <div class="code-runner-preview-container" style="flex: 2;">
-                                    <div class="code-runner-preview-header">
-                                        <span>Preview</span>
-                                    </div>
-                                    <iframe id="preview-frame-runner"></iframe>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="code-runner-controls">
-                            <button id="run-btn-runner" class="code-runner-btn code-runner-run-btn">
-                                <span>▶️ Run Code</span>
-                            </button>
-                            <button id="clear-btn-runner" class="code-runner-btn code-runner-clear-btn">
-                                <span>🗑️ Clear All</span>
-                            </button>
-                            <button id="save-btn-runner" class="code-runner-btn code-runner-save-btn">
-                                <span>💾 Save to Browser</span>
-                            </button>
-                            <button id="save-file-btn-runner" class="code-runner-btn code-runner-save-file-btn">
-                                <span>💾 Save to File</span>
-                            </button>
-                        </div>
-                    </div>
-                     <!-- End Embedded HTML Code Runner -->
-                </div>
-                <!-- End File Settings Panel -->
-                <!-- Patch Notes Settings Panel -->
-                <div class="settings-panel" id="patch-settings-panel">
-                    <h2>Patch Notes</h2>
-                    <div class="patch-notes-content">
-                        <h3>Version 1.1 (Current)</h3>
-                        <ul>
-                            <li><strong>Title Change:</strong> Application title changed from "Multi-App Portal" to "Crisis Unblocker".</li>
-                            <li><strong>Settings Menu:</strong> Added a dedicated settings menu accessible via a gear icon (⚙️) in the header.</li>
-                            <li><strong>Customization:</strong> Settings menu allows users to change the page/tab title and favicon dynamically.</li>
-                            <li><strong>Panic Button:</strong> Added a "Panic Button" within the settings menu that redirects the user to Google Classroom (<code>https://classroom.google.com/h</code>).</li>
-                            <li><strong>Developer Tools:</strong> Integrated the "HTML Code Runner" tool into a new "File (Dev)" section within the settings menu.</li>
-                            <li><strong>UI Improvements:</strong> Refined the overall layout and styling of the main portal and integrated applications.</li>
-                            <li><strong>Code Structure:</strong> Refactored code for better organization and maintainability.</li>
-                        </ul>
-                        <h3>Version 1.0 (Original)</h3>
-                        <ul>
-                            <li><strong>Initial Release:</strong> Launched with core applications: Home, YouTube, ChatGPT, Unblocked Games, and Website Loader.</li>
-                            <li><strong>Basic Functionality:</strong> Provided access to various online tools and resources within a single interface.</li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- End Patch Notes Settings Panel -->
-                <!-- Add more panels here if needed -->
-            </div>
-        </div>
-        <div id="settingsMenuFooter">
-            <button id="saveSettingsMain" onclick="saveSettings()">Save Changes</button>
-            <button id="closeSettingsMain" onclick="closeSettings()">Close</button>
-        </div>
-    </div>
-    <script>
-        // --- Original Portal JavaScript Logic ---
-        // Navigation Logic
-        function showApp(appName) {
-            // Hide all apps
-            document.querySelectorAll('.app-container').forEach(app => {
-                app.classList.remove('active');
-            });
-            // Show selected app
-            document.getElementById(`app-${appName}`).classList.add('active');
-            // Update active nav button
-            document.querySelectorAll('.nav button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById(`nav-${appName}`).classList.add('active');
-            // If YouTube is selected and it's the first time, load suggested videos
-            if (appName === 'youtube' && !window.youtubeInitialized) {
-                loadSuggestedVideos();
-                window.youtubeInitialized = true;
-            }
-            // Initialize Website Loader if selected
-            if (appName === 'websites') {
-                updateSavedUrls();
-            }
+</html></textarea></div><div class="code-runner-preview-container" style="flex:2"><div class="code-runner-preview-header"><span>Preview</span></div><iframe id="preview-frame-runner"></iframe></div></div></div><div class="code-runner-controls"><button id="run-btn-runner" class="code-runner-btn code-runner-run-btn"><span>▶️ Run Code</span></button><button id="clear-btn-runner" class="code-runner-btn code-runner-clear-btn"><span>🗑️ Clear All</span></button><button id="save-btn-runner" class="code-runner-btn code-runner-save-btn"><span>💾 Save to Browser</span></button><button id="save-file-btn-runner" class="code-runner-btn code-runner-save-file-btn"><span>💾 Save to File</span></button></div></div></div><div class="settings-panel" id="patch-settings-panel"><h2>Patch Notes</h2><div class="patch-notes-content"><h3>Version 1.2 (Current)</h3><ul><li><strong>Settings Menu Expansion:</strong> Added multiple new tabs: Appearance, Functionality, User Experience, Info & Diagnostics.</li><li><strong>Appearance:</strong> Added Theme selector (Default, Dark, Green, Purple) and Custom CSS injection.</li><li><strong>Functionality:</strong> Added options to pre-load apps on startup and adjust memory management limits (YouTube ID/Token tracking).</li><li><strong>User Experience:</strong> Added options to hide specific app tabs, a debug mode toggle, and a reset settings button.</li><li><strong>Info & Diagnostics:</strong> Added system information display (User Agent, Platform, LocalStorage Size) and Export/Import settings functionality.</li><li><strong>Persistence:</strong> All new settings are saved to localStorage and loaded on page startup.</li><li><strong>App Visibility:</strong> Hidden apps are now properly managed in the navigation bar.</li></ul><h3>Version 1.1</h3><ul><li><strong>Title Change:</strong> Application title changed from "Multi-App Portal" to "Crisis Unblocker".</li><li><strong>Settings Menu:</strong> Added a dedicated settings menu accessible via a gear icon (⚙️) in the header.</li><li><strong>Customization:</strong> Settings menu allows users to change the page/tab title and favicon dynamically.</li><li><strong>Panic Button:</strong> Added a "Panic Button" within the settings menu that redirects the user to Google Classroom (<code>https://classroom.google.com/h</code>).</li><li><strong>Developer Tools:</strong> Integrated the "HTML Code Runner" tool into a new "File (Dev)" section within the settings menu.</li><li><strong>UI Improvements:</strong> Refined the overall layout and styling of the main portal and integrated applications.</li><li><strong>Code Structure:</strong> Refactored code for better organization and maintainability.</li></ul><h3>Version 1.0 (Original)</h3><ul><li><strong>Initial Release:</strong> Launched with core applications: Home, YouTube, Lovable, Unblocked Games, and Website Loader.</li><li><strong>Basic Functionality:</strong> Provided access to various online tools and resources within a single interface.</li></ul></div></div></div></div><div id="settingsMenuFooter"><button id="saveSettingsMain" onclick="saveSettings()">Save Changes</button><button id="closeSettingsMain" onclick="closeSettings()">Close</button></div></div><script>
+// Define YouTube API keys array
+const YOUTUBE_API_KEYS = [
+    'AIzaSyCjS-8uAsUI-BXrKDmfYzQL6zENsEepOJ8',
+    'AIzaSyCn4Ei1NiiOWkAYqfakggXiqrJl2mj_Sz8',
+    'AIzaSyBkNvwJqmHxsqN4Oy09_KqlZOHSBEE7wyc',
+    'AIzaSyBiwy1X4nNdEdwbZRyBEEEfEwaSS2BOEVI',
+    'AIzaSyBTSwieuxNmfAxw5YuYJJSCjymTzaNUVxM'
+];
+let currentApiKeyIndex = 0; // Start with the first key
+// Function to get the current API key
+function getCurrentApiKey() {
+    return YOUTUBE_API_KEYS[currentApiKeyIndex];
+}
+// Function to rotate to the next API key
+function rotateApiKey() {
+    currentApiKeyIndex = (currentApiKeyIndex + 1) % YOUTUBE_API_KEYS.length;
+    console.log('Switched to YouTube API key index:', currentApiKeyIndex, 'Key:', getCurrentApiKey());
+}
+const themeStyles={default:'',dark:`body{background-color:#1e1e1e;color:#e0e0e0}.header{background-color:#2c2c2c}.youtube-app{background-color:#2a2a2a;color:#e0e0e0}.website-loader-app{background-color:#2a2a2a;color:#e0e0e0}.nav button{background-color:#3c3c3c;color:#e0e0e0}.nav button:hover{background-color:#4c4c4c}.nav button.active{background-color:#4a4a4a}.video-grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}.video-item{background-color:#3c3c3c}.video-title{color:#e0e0e0}.video-description{color:#aaaaaa}.search-form input[type="text"]{background-color:#3c3c3c;color:#e0e0e0;border-color:#555}.search-form button{background-color:#4a4a4a;color:#e0e0e0}.button{background-color:#4a4a4a;color:#e0e0e0}.button:disabled{background-color:#5a5a5a}footer{background-color:#2a2a2a;color:#aaaaaa}.settings-tab-button{background-color:#f5f5f5;color:#333}.settings-tab-button:hover{background-color:#e9e9e9}.settings-tab-button.active{background-color:#4285f4;color:white}#settingsMenuPanels{background-color:#f9f9f9}.settings-panel{background-color:white}`,green:`body{background-color:#e8f5e9;color:#2e7d32}.header{background-color:#4caf50}.youtube-app{background-color:#f1f8e9;color:#2e7d32}.website-loader-app{background-color:#f1f8e9;color:#2e7d32}.nav button{background-color:white;color:#4caf50}.nav button:hover{background-color:#e8f5e9}.nav button.active{background-color:#388e3c;color:white}.video-item{background-color:white}.video-title{color:#2e7d32}.search-form input[type="text"]{border-color:#4caf50}.search-form button{background-color:#2e7d32;color:white}.button{background-color:#2e7d32;color:white}.button:disabled{background-color:#a5d6a7}footer{background-color:#e8f5e9;color:#2e7d32}`,purple:`body{background-color:#f3e5f5;color:#7b1fa2}.header{background-color:#9c27b0}.youtube-app{background-color:#f3e5f5;color:#7b1fa2}.website-loader-app{background-color:#f3e5f5;color:#7b1fa2}.nav button{background-color:white;color:#9c27b0}.nav button:hover{background-color:#f3e5f5}.nav button.active{background-color:#7b1fa2;color:white}.video-item{background-color:white}.video-title{color:#7b1fa2}.search-form input[type="text"]{border-color:#9c27b0}.search-form button{background-color:#7b1fa2;color:white}.button{background-color:#7b1fa2;color:white}.button:disabled{background-color:#ce93d8}footer{background-color:#f3e5f5;color:#7b1fa2}`};(function() {
+  const splash = document.getElementById('securitySplash');
+  if (!splash) return;
+  // Load settings or use defaults
+  const fallbackUrl = localStorage.getItem('fallbackUrl') || 'https://mail.google.com';
+  const waitTime = parseInt(localStorage.getItem('splashWaitTime')) || 2;
+  const requiredKey = localStorage.getItem('requiredKeyCode') || 'Enter';
+  // --- NEW: Apply custom title and favicon immediately ---
+  const savedTitle = localStorage.getItem('customPageTitle');
+  const savedFavicon = localStorage.getItem('customFaviconUrl');
+  if (savedTitle) {
+    document.title = savedTitle;
+  } else {
+    document.title = 'Crisis Unblocker'; // Set default title if not saved
+  }
+  if (savedFavicon) {
+    document.getElementById('faviconTag').href = savedFavicon;
+  } else {
+    document.getElementById('faviconTag').href = 'https://cdn-icons-png.freepik.com/512/9073/9073363.png'; // Set default favicon if not saved
+  }
+  // --- END NEW SECTION ---
+  let passed = false;
+  const handleKeyDown = (e) => {
+    if (e.code === requiredKey) {
+      clearTimeout(timeoutId);
+      passed = true;
+      splash.style.display = 'none';
+      document.removeEventListener('keydown', handleKeyDown);
+      initializeApp(); // Proceed with normal app init
+    }
+  };
+  document.addEventListener('keydown', handleKeyDown);
+  const timeoutId = setTimeout(() => {
+    if (!passed) {
+      window.location.href = fallbackUrl;
+    }
+  }, waitTime * 1000);
+})();
+// ===== ORIGINAL APP INITIALIZATION (now wrapped) =====
+function initializeApp() {
+  // Load settings into UI fields (but title/favicon are already applied globally)
+  const savedTitle = localStorage.getItem('customPageTitle');
+  const savedFavicon = localStorage.getItem('customFaviconUrl');
+  if (savedTitle) {
+    document.getElementById('pageTitle').value = savedTitle; // Only update the input field
+  } else {
+    document.getElementById('pageTitle').value = 'Crisis Unblocker'; // Set default in input field if not saved
+  }
+  if (savedFavicon) {
+    document.getElementById('faviconUrl').value = savedFavicon; // Only update the input field
+    document.getElementById('faviconTag').href = savedFavicon; // Ensure favicon is set on page load
+  } else {
+    document.getElementById('faviconUrl').value = 'https://cdn-icons-png.freepik.com/512/9073/9073363.png'; // Set default in input field if not saved
+    document.getElementById('faviconTag').href = 'https://cdn-icons-png.freepik.com/512/9073/9073363.png'; // Ensure default favicon is set on page load
+  }
+  // Load security splash settings into UI
+  const fallbackUrl = localStorage.getItem('fallbackUrl') || 'https://mail.google.com';
+  const splashWaitTime = localStorage.getItem('splashWaitTime') || 2;
+  const requiredKeyCode = localStorage.getItem('requiredKeyCode') || 'Enter';
+  document.getElementById('fallbackUrl').value = fallbackUrl;
+  document.getElementById('splashWaitTime').value = splashWaitTime;
+  document.getElementById('requiredKeyCode').value = requiredKeyCode;
+  const savedTheme = localStorage.getItem('selectedTheme') || 'default';
+  const savedCSS = localStorage.getItem('customCSS') || '';
+  applyTheme(savedTheme);
+  document.getElementById('customCSSInput').value = savedCSS;
+  if (savedCSS) applyCustomCSS(savedCSS);
+  document.getElementById(`theme-${savedTheme}`).checked = true;
+  const savedPreloads = JSON.parse(localStorage.getItem('preloadApps')) || [];
+  const maxIds = localStorage.getItem('maxDisplayedIds') || 100;
+  const maxTokens = localStorage.getItem('maxPrevTokens') || 10;
+  savedPreloads.forEach(appName => {
+    const checkbox = document.getElementById(`preload-${appName}`);
+    if (checkbox) checkbox.checked = true;
+  });
+  document.getElementById('maxDisplayedIds').value = maxIds;
+  document.getElementById('maxPrevTokens').value = maxTokens;
+  const savedHiddenApps = JSON.parse(localStorage.getItem('hiddenApps')) || [];
+  const debugMode = localStorage.getItem('debugMode') === 'true';
+  savedHiddenApps.forEach(appName => {
+    const checkbox = document.getElementById(`hide-${appName}`);
+    if (checkbox) checkbox.checked = true;
+    const navButton = document.getElementById(`nav-${appName}`);
+    if (navButton) navButton.style.display = 'none';
+  });
+  document.getElementById('debugMode').checked = debugMode;
+  if (debugMode) console.log('Debug mode enabled.');
+  updateSystemInfo();
+  if (document.getElementById('app-websites').classList.contains('active')) updateSavedUrls();
+}
+document.getElementById('searchQuery').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    searchVideos();
+  }
+});
+document.getElementById('appFullscreenBtn').addEventListener('click', function() {
+  const activeApp = document.querySelector('.app-container.active');
+  if (!activeApp) return;
+  let targetElement = activeApp;
+  if (activeApp.id === 'app-websites') {
+    const iframeContainer = activeApp.querySelector('#iframeContainer');
+    if (iframeContainer) targetElement = iframeContainer;
+  }
+  if (targetElement.requestFullscreen) {
+    targetElement.requestFullscreen();
+  } else if (targetElement.webkitRequestFullscreen) {
+    targetElement.webkitRequestFullscreen();
+  } else if (targetElement.msRequestFullscreen) {
+    targetElement.msRequestFullscreen();
+  } else if (targetElement.mozRequestFullScreen) {
+    targetElement.mozRequestFullScreen();
+  }
+});
+function openSettings(){document.getElementById('overlay').style.display='block';document.getElementById('settingsMenu').style.display='flex'}function closeSettings(){document.getElementById('overlay').style.display='none';document.getElementById('settingsMenu').style.display='none'}function saveSettings(){
+  const newTitle=document.getElementById('pageTitle').value.trim();
+  const newFaviconUrl=document.getElementById('faviconUrl').value.trim();
+  if(newTitle){
+    document.title=newTitle;
+    localStorage.setItem('customPageTitle',newTitle);
+  } else localStorage.removeItem('customPageTitle');
+  if(newFaviconUrl){
+    document.getElementById('faviconTag').href=newFaviconUrl;
+    localStorage.setItem('customFaviconUrl',newFaviconUrl);
+  } else localStorage.removeItem('customFaviconUrl');
+  // Save security splash settings
+  const fallbackUrl = document.getElementById('fallbackUrl').value.trim() || 'https://mail.google.com';
+  const splashWaitTime = document.getElementById('splashWaitTime').value || 2;
+  const requiredKeyCode = document.getElementById('requiredKeyCode').value.trim() || 'Enter';
+  localStorage.setItem('fallbackUrl', fallbackUrl);
+  localStorage.setItem('splashWaitTime', splashWaitTime);
+  localStorage.setItem('requiredKeyCode', requiredKeyCode);
+  const selectedTheme=document.querySelector('input[name="theme"]:checked').value;
+  const customCSS=document.getElementById('customCSSInput').value.trim();
+  localStorage.setItem('selectedTheme',selectedTheme);
+  localStorage.setItem('customCSS',customCSS);
+  applyTheme(selectedTheme);
+  applyCustomCSS(customCSS);
+  const preloads=Array.from(document.querySelectorAll('input[name="preload-apps"]:checked')).map(cb=>cb.value);
+  const maxIds=document.getElementById('maxDisplayedIds').value;
+  const maxTokens=document.getElementById('maxPrevTokens').value;
+  localStorage.setItem('preloadApps',JSON.stringify(preloads));
+  localStorage.setItem('maxDisplayedIds',maxIds);
+  localStorage.setItem('maxPrevTokens',maxTokens);
+  const hiddenApps=Array.from(document.querySelectorAll('input[name="hide-apps"]:checked')).map(cb=>cb.value);
+  const debugMode=document.getElementById('debugMode').checked;
+  localStorage.setItem('hiddenApps',JSON.stringify(hiddenApps));
+  localStorage.setItem('debugMode',debugMode);
+  document.querySelectorAll('input[name="hide-apps"]').forEach(checkbox=>{
+    const appName=checkbox.value;
+    const navButton=document.getElementById(`nav-${appName}`);
+    if(navButton)navButton.style.display=checkbox.checked?'none':'';
+  });
+  if(debugMode)console.log('Debug mode enabled.');
+  else console.log('Debug mode disabled.');
+  alert('Settings saved!')
+}document.querySelectorAll('.settings-tab-button').forEach(button=>{button.addEventListener('click',()=>{document.querySelectorAll('.settings-tab-button').forEach(btn=>btn.classList.remove('active'));document.querySelectorAll('.settings-panel').forEach(panel=>panel.classList.remove('active'));button.classList.add('active');const tabName=button.getAttribute('data-tab');document.getElementById(`${tabName}-settings-panel`).classList.add('active')})});function applyTheme(themeName){let styleElement=document.getElementById('theme-styles');if(!styleElement){const newStyle=document.createElement('style');newStyle.id='theme-styles';document.head.appendChild(newStyle)}document.getElementById('theme-styles').textContent=themeStyles[themeName]||''}function applyCustomCSS(cssCode){let styleElement=document.getElementById('custom-css-styles');if(!styleElement){const newStyle=document.createElement('style');newStyle.id='custom-css-styles';document.head.appendChild(newStyle)}document.getElementById('custom-css-styles').textContent=cssCode||''}function resetSettings(){if(confirm('Are you sure you want to reset ALL settings to their defaults? This cannot be undone.')){localStorage.clear();location.reload()}}function updateSystemInfo(){document.getElementById('userAgentInfo').textContent=navigator.userAgent;document.getElementById('platformInfo').textContent=navigator.platform;let totalSize=0;for(let key in localStorage)if(localStorage.hasOwnProperty(key))totalSize+=localStorage[key].length+key.length;document.getElementById('localStorageSizeInfo').textContent=`${totalSize} characters`;const activeApps=[];if(window.appInitialized)for(let app in window.appInitialized)if(window.appInitialized[app])activeApps.push(app);document.getElementById('activeAppsInfo').textContent=activeApps.join(', ')||'None loaded yet'}function exportSettings(){const settingsObject={customPageTitle:localStorage.getItem('customPageTitle'),customFaviconUrl:localStorage.getItem('customFaviconUrl'),selectedTheme:localStorage.getItem('selectedTheme'),customCSS:localStorage.getItem('customCSS'),preloadApps:JSON.parse(localStorage.getItem('preloadApps'))||[],maxDisplayedIds:localStorage.getItem('maxDisplayedIds'),maxPrevTokens:localStorage.getItem('maxPrevTokens'),hiddenApps:JSON.parse(localStorage.getItem('hiddenApps'))||[],debugMode:localStorage.getItem('debugMode')==='true'};const settingsString=JSON.stringify(settingsObject,null,2);document.getElementById('exportData').value=settingsString;const blob=new Blob([settingsString],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='crisis_unblocker_settings.json';document.body.appendChild(a);a.click();document.body.removeChild(a)}function importSettings(){const inputString=document.getElementById('importData').value.trim();if(!inputString){alert('Please paste exported settings into the text area.');return}try{const settingsObject=JSON.parse(inputString);if(settingsObject.customPageTitle!==undefined){localStorage.setItem('customPageTitle',settingsObject.customPageTitle);document.getElementById('pageTitle').value=settingsObject.customPageTitle;document.title=settingsObject.customPageTitle}if(settingsObject.customFaviconUrl!==undefined){localStorage.setItem('customFaviconUrl',settingsObject.customFaviconUrl);document.getElementById('faviconUrl').value=settingsObject.customFaviconUrl;document.getElementById('faviconTag').href=settingsObject.customFaviconUrl}if(settingsObject.selectedTheme!==undefined){localStorage.setItem('selectedTheme',settingsObject.selectedTheme);document.getElementById(`theme-${settingsObject.selectedTheme}`).checked=true;applyTheme(settingsObject.selectedTheme)}if(settingsObject.customCSS!==undefined){localStorage.setItem('customCSS',settingsObject.customCSS);document.getElementById('customCSSInput').value=settingsObject.customCSS;applyCustomCSS(settingsObject.customCSS)}if(settingsObject.preloadApps!==undefined){localStorage.setItem('preloadApps',JSON.stringify(settingsObject.preloadApps));settingsObject.preloadApps.forEach(appName=>{const checkbox=document.getElementById(`preload-${appName}`);if(checkbox)checkbox.checked=true})}if(settingsObject.maxDisplayedIds!==undefined){localStorage.setItem('maxDisplayedIds',settingsObject.maxDisplayedIds);document.getElementById('maxDisplayedIds').value=settingsObject.maxDisplayedIds}if(settingsObject.maxPrevTokens!==undefined){localStorage.setItem('maxPrevTokens',settingsObject.maxPrevTokens);document.getElementById('maxPrevTokens').value=settingsObject.maxPrevTokens}if(settingsObject.hiddenApps!==undefined){localStorage.setItem('hiddenApps',JSON.stringify(settingsObject.hiddenApps));settingsObject.hiddenApps.forEach(appName=>{const checkbox=document.getElementById(`hide-${appName}`);if(checkbox)checkbox.checked=true;const navButton=document.getElementById(`nav-${appName}`);if(navButton)navButton.style.display='none'})}if(settingsObject.debugMode!==undefined){localStorage.setItem('debugMode',settingsObject.debugMode);document.getElementById('debugMode').checked=settingsObject.debugMode;if(settingsObject.debugMode)console.log('Debug mode enabled via import.')}alert('Settings imported successfully! Please save and reload the page to see all changes.');updateSystemInfo()}catch(e){alert('Error parsing imported settings. Please check the format.');console.error(e)}}function showApp(appName){const hiddenApps=JSON.parse(localStorage.getItem('hiddenApps'))||[];if(hiddenApps.includes(appName)){console.log(`App ${appName} is hidden.`);return}document.querySelectorAll('.app-container').forEach(app=>app.classList.remove('active'));document.getElementById(`app-${appName}`).classList.add('active');document.querySelectorAll('.nav button').forEach(btn=>btn.classList.remove('active'));document.getElementById(`nav-${appName}`).classList.add('active');if(!window.appInitialized)window.appInitialized={};if(!window.appInitialized[appName]){window.appInitialized[appName]=true;if(appName!=='home')document.getElementById(`nav-${appName}`).classList.add('has-close');switch(appName){case'youtube':loadSuggestedVideosLazy();break;case'HEXA':document.getElementById('HEXAFrame').src='https://hexa.su/';break;case'games':document.getElementById('gamesFrame').src='https://geography-lessons-5.pro/#google_vignette';break;case'websites':updateSavedUrls();break;case'spotify':document.getElementById('spotifyFrame').src='https://spottube.lovable.app';break}}}function loadSuggestedVideosLazy(){if(document.getElementById('app-youtube').classList.contains('active'))fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=8&key=${getCurrentApiKey()}`).then(response=>response.json()).then(data=>{nextPageToken=data.nextPageToken;displayVideos(data.items)}).catch(error=>console.error('Error fetching suggested videos:',error))}function closeApp(appName,event){event.stopPropagation();if(appName==='home')return;const appElement=document.getElementById(`app-${appName}`);const navButton=document.getElementById(`nav-${appName}`);switch(appName){case'youtube':if(window.displayedVideoIds)window.displayedVideoIds.clear();if(window.prevPageTokens)window.prevPageTokens=[];window.nextPageToken='';window.currentQuery='';document.getElementById('searchResults').innerHTML='';document.getElementById('videoPlayer').innerHTML='';document.getElementById('searchQuery').value='';document.getElementById('videoIdInput').value='';document.getElementById('backButton').disabled=true;document.getElementById('nextButton').disabled=false;window.appInitialized['youtube']=false;navButton.classList.remove('has-close');break;case'HEXA':document.getElementById('HEXAFrame').src='about:blank';window.appInitialized['HEXA']=false;navButton.classList.remove('has-close');break;case'games':document.getElementById('gamesFrame').src='about:blank';window.appInitialized['games']=false;navButton.classList.remove('has-close');break;case'websites':document.getElementById('webFrame').src='about:blank';document.getElementById('urlInput').value='';document.getElementById('errorMessage').style.display='none';window.appInitialized['websites']=false;navButton.classList.remove('has-close');break;case'spotify':document.getElementById('spotifyFrame').src='about:blank';window.appInitialized['spotify']=false;navButton.classList.remove('has-close');break}if(appElement.classList.contains('active'))showApp('home')}function triggerPanic(){window.location.href='https://classroom.google.com/h'}var nextPageToken='';var prevPageTokens=[];var MAX_DISPLAYED_IDS=parseInt(localStorage.getItem('maxDisplayedIds'))||100;var MAX_PREV_TOKENS=parseInt(localStorage.getItem('maxPrevTokens'))||10;var displayedVideoIds=new Set();var currentQuery='';function displayVideos(videos){var searchResultsContainer=document.getElementById('searchResults');searchResultsContainer.innerHTML='';videos.forEach(video=>{var videoId=video.id.videoId||video.id;var videoTitle=video.snippet.title;var videoDescription=video.snippet.description;var thumbnailUrl=video.snippet.thumbnails.medium.url;if(!displayedVideoIds.has(videoId)){if(displayedVideoIds.size>=MAX_DISPLAYED_IDS){const firstId=displayedVideoIds.values().next().value;if(firstId)displayedVideoIds.delete(firstId)}displayedVideoIds.add(videoId);var videoElement=document.createElement('div');videoElement.classList.add('video-item');videoElement.innerHTML=`<div class="video-thumbnail"><img src="${thumbnailUrl}" alt="${videoTitle}"></div><div class="video-details"><h3 class="video-title">${videoTitle}</h3><p class="video-description">${videoDescription}</p></div>`;videoElement.addEventListener('click',function(){embedVideo(videoId)});searchResultsContainer.appendChild(videoElement)}});document.getElementById('backButton').disabled=prevPageTokens.length===0}function embedVideo(videoId){var searchResultsContainer=document.getElementById('searchResults');searchResultsContainer.innerHTML='';var videoPlayerContainer=document.getElementById('videoPlayer');videoPlayerContainer.innerHTML=`<div class="embed-container"><iframe src="https://www.yout-ube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;var likeButtonContainer=document.createElement('div');likeButtonContainer.classList.add('like-button');likeButtonContainer.innerHTML=`<button id="likeButton" onclick="simulateLike()" disabled style="margin-top: 10px; padding: 10px 20px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;"><img src="https://img.icons8.com/fluency-systems-filled/24/000000/thumb-up.png" style="vertical-align: middle; margin-right: 5px;"/><span id="likeCount">Loading...</span></button>`;videoPlayerContainer.appendChild(likeButtonContainer);fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${getCurrentApiKey()}`).then(response=>response.json()).then(data=>{if(data.items&&data.items.length>0){var likeCount=data.items[0].statistics.likeCount;document.getElementById('likeCount').textContent=likeCount;document.getElementById('likeButton').disabled=false}else document.getElementById('likeCount').textContent='N/A'}).catch(error=>{console.error('Error fetching like count:',error);document.getElementById('likeCount').textContent='Error'});document.getElementById('backButton').style.display='none';document.getElementById('nextButton').style.display='none'}function simulateLike(){alert('Like simulated! (This is a demo)')}function playVideoFromInput(){var input=document.getElementById('videoIdInput').value.trim();var videoId=extractVideoId(input);if(videoId)embedVideo(videoId);else alert('Please enter a valid YouTube URL or video ID')}function extractVideoId(url){var patterns=[/(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/(?:embed\/|watch\?v=|v\/|\/)?([^\s&]+)/,/^([A-Za-z0-9_-]{11})$/];for(var pattern of patterns){var match=url.match(pattern);if(match)return match[1]}return null}function searchVideos(){var searchQuery=document.getElementById('searchQuery').value;if(searchQuery){currentQuery=searchQuery;nextPageToken='';prevPageTokens=[];displayedVideoIds.clear();fetchVideos(searchQuery)}else alert('Please enter a search query')}function fetchVideos(searchQuery){fetch(`https://www.googleapis.com/youtube/v3/search?q=${searchQuery}&part=snippet&type=video&maxResults=8&pageToken=${nextPageToken}&key=${getCurrentApiKey()}`).then(response=>response.json()).then(data=>{if(nextPageToken){if(prevPageTokens.length>=MAX_PREV_TOKENS)prevPageTokens.shift();prevPageTokens.push(nextPageToken)}nextPageToken=data.nextPageToken;displayVideos(data.items)}).catch(error=>{console.error('Error fetching search results:', error);
+        // If the current key fails, try the next one
+        if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+            console.log('API request failed, rotating key...');
+            rotateApiKey();
+            // Retry the request with the new key
+            fetch(`https://www.googleapis.com/youtube/v3/search?q=${searchQuery}&part=snippet&type=video&maxResults=8&pageToken=${nextPageToken}&key=${getCurrentApiKey()}`).then(response=>response.json()).then(data=>{if(nextPageToken){if(prevPageTokens.length>=MAX_PREV_TOKENS)prevPageTokens.shift();prevPageTokens.push(nextPageToken)}nextPageToken=data.nextPageToken;displayVideos(data.items)}).catch(error=>console.error('Error fetching search results after key rotation:',error));
+        } else {
+            console.error('Error fetching search results:', error);
         }
-        // Panic Button Functionality
-        function triggerPanic() {
-            window.location.href = 'https://classroom.google.com/h';
-        }
-        // Settings Menu Functionality
-        function openSettings() {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('settingsMenu').style.display = 'flex'; // Use flex for new layout
-             // Load current settings into the input fields
-            document.getElementById('pageTitle').value = document.title;
-            document.getElementById('faviconUrl').value = document.getElementById('faviconTag').href;
-        }
-        function closeSettings() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('settingsMenu').style.display = 'none';
-        }
-        function saveSettings() {
-            const newTitle = document.getElementById('pageTitle').value.trim();
-            const newFaviconUrl = document.getElementById('faviconUrl').value.trim();
-            if (newTitle) {
-                document.title = newTitle;
-                // Optionally update the header title if desired
-                // document.querySelector('.header h1').textContent = newTitle;
-            }
-            if (newFaviconUrl) {
-                // Update the existing favicon link tag
-                document.getElementById('faviconTag').href = newFaviconUrl;
-            }
-            // Save settings to localStorage for persistence (optional)
-            localStorage.setItem('customPageTitle', newTitle);
-            localStorage.setItem('customFaviconUrl', newFaviconUrl);
-            alert('Settings saved!');
-        }
-        // Settings Tab Switching
-        document.querySelectorAll('.settings-tab-button').forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons and panels
-                document.querySelectorAll('.settings-tab-button').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.settings-panel').forEach(panel => panel.classList.remove('active'));
-                // Add active class to clicked button
-                button.classList.add('active');
-                // Show the corresponding panel
-                const tabName = button.getAttribute('data-tab');
-                document.getElementById(`${tabName}-settings-panel`).classList.add('active');
-            });
-        });
-        // Load saved settings on page load (optional)
-        window.addEventListener('load', function() {
-             const savedTitle = localStorage.getItem('customPageTitle');
-             const savedFavicon = localStorage.getItem('customFaviconUrl');
-             if (savedTitle) {
-                 document.title = savedTitle;
-                 // document.querySelector('.header h1').textContent = savedTitle; // Update header if needed
-             }
-             if (savedFavicon) {
-                 document.getElementById('faviconTag').href = savedFavicon;
-             }
-             // Initialize Website Loader if it's the active app
-             if (document.getElementById('app-websites').classList.contains('active')) {
-                 updateSavedUrls();
-             }
-        });
-        // YouTube App Logic (Updated with working version)
-        var apiKey = 'AIzaSyCjS-8uAsUI-BXrKDmfYzQL6zENsEepOJ8';
-        var nextPageToken = '';
-        var prevPageTokens = [];
-        var displayedVideoIds = new Set();
-        var currentQuery = '';
-        // Load suggested videos on initialization
-        function loadSuggestedVideos() {
-            fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=8&key=${apiKey}`)
-                .then(response => response.json())
-                .then(data => {
-                    nextPageToken = data.nextPageToken;
-                    displayVideos(data.items);
-                })
-                .catch(error => console.error('Error fetching suggested videos:', error));
-        }
-        function displayVideos(videos) {
-            var searchResultsContainer = document.getElementById('searchResults');
-            searchResultsContainer.innerHTML = '';
-            videos.forEach(video => {
-                var videoId = video.id.videoId || video.id;
-                var videoTitle = video.snippet.title;
-                var videoDescription = video.snippet.description;
-                var thumbnailUrl = video.snippet.thumbnails.medium.url;
-                if (!displayedVideoIds.has(videoId)) {
-                    displayedVideoIds.add(videoId);
-                    var videoElement = document.createElement('div');
-                    videoElement.classList.add('video-item');
-                    videoElement.innerHTML = `
-                        <div class="video-thumbnail">
-                            <img src="${thumbnailUrl}" alt="${videoTitle}">
-                        </div>
-                        <div class="video-details">
-                            <h3 class="video-title">${videoTitle}</h3>
-                            <p class="video-description">${videoDescription}</p>
-                        </div>
-                    `;
-                    videoElement.addEventListener('click', function () {
-                        embedVideo(videoId);
-                    });
-                    searchResultsContainer.appendChild(videoElement);
-                }
-            });
-            document.getElementById('backButton').disabled = prevPageTokens.length === 0;
-        }
-        function embedVideo(videoId) {
-            var searchResultsContainer = document.getElementById('searchResults');
-            searchResultsContainer.innerHTML = '';
-            var videoPlayerContainer = document.getElementById('videoPlayer');
-            videoPlayerContainer.innerHTML = `
-                <div class="embed-container">
-                    <iframe src="https://www.yout-ube.com/embed/${videoId}"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                    </iframe>
-                </div>
-            `;
-            var likeButtonContainer = document.createElement('div');
-            likeButtonContainer.classList.add('like-button');
-            likeButtonContainer.innerHTML = `
-                <button id="likeButton" onclick="simulateLike()" disabled style="margin-top: 10px; padding: 10px 20px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                    <img src="https://img.icons8.com/fluency-systems-filled/24/000000/thumb-up.png" style="vertical-align: middle; margin-right: 5px;"/>
-                    <span id="likeCount">Loading...</span>
-                </button>
-            `;
-            videoPlayerContainer.appendChild(likeButtonContainer);
-            fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.items && data.items.length > 0) {
-                        var likeCount = data.items[0].statistics.likeCount;
-                        document.getElementById('likeCount').textContent = likeCount;
-                        document.getElementById('likeButton').disabled = false;
-                    } else {
-                        document.getElementById('likeCount').textContent = 'N/A';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching like count:', error);
-                    document.getElementById('likeCount').textContent = 'Error';
-                });
-            document.getElementById('backButton').style.display = 'none';
-            document.getElementById('nextButton').style.display = 'none';
-        }
-        function simulateLike() {
-            alert('Like simulated! (This is a demo)');
-        }
-        function playVideoFromInput() {
-            var input = document.getElementById('videoIdInput').value.trim();
-            var videoId = extractVideoId(input);
-            if (videoId) {
-                embedVideo(videoId);
-            } else {
-                alert('Please enter a valid YouTube URL or video ID');
-            }
-        }
-        function extractVideoId(url) {
-            var patterns = [
-                /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/(?:embed\/|watch\?v=|v\/|\/)?([^\s&]+)/,
-                /^([A-Za-z0-9_-]{11})$/,
-            ];
-            for (var pattern of patterns) {
-                var match = url.match(pattern);
-                if (match) {
-                    return match[1];
-                }
-            }
-            return null;
-        }
-        function searchVideos() {
-            var searchQuery = document.getElementById('searchQuery').value;
-            if (searchQuery) {
-                currentQuery = searchQuery;
-                nextPageToken = '';
-                prevPageTokens = [];
-                displayedVideoIds.clear();
-                fetchVideos(searchQuery);
-            } else {
-                alert('Please enter a search query');
-            }
-        }
-        function fetchVideos(searchQuery) {
-            fetch(`https://www.googleapis.com/youtube/v3/search?q=${searchQuery}&part=snippet&type=video&maxResults=8&pageToken=${nextPageToken}&key=${apiKey}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (nextPageToken) {
-                        prevPageTokens.push(nextPageToken);
-                    }
-                    nextPageToken = data.nextPageToken;
-                    displayVideos(data.items);
-                })
-                .catch(error => console.error('Error fetching search results:', error));
-        }
-        function loadMoreVideos() {
-            if (nextPageToken) {
-                fetchVideos(currentQuery);
-            }
-        }
-        function loadPreviousVideos() {
-            if (prevPageTokens.length > 0) {
-                nextPageToken = prevPageTokens.pop();
-                fetchVideos(currentQuery);
-            }
-        }
-        // Website Loader App Logic (Embedded)
-        function loadWebsite() {
-            var url = document.getElementById('urlInput').value.trim();
-            if (!url) {
-                alert("Please enter a valid URL.");
-                return;
-            }
-            // Improved URL validation
-            if (!/^https?:\/\//i.test(url)) {
-                url = 'http://' + url;
-            }
-            document.getElementById('webFrame').src = url;
-            // Reset error message
-            hideErrorMessage();
-            // Check if the URL is valid after setting it
-            checkUrl(url);
-        }
-        function checkUrl(url) {
-            const iframe = document.getElementById('webFrame');
-            iframe.onload = function() {
-                hideErrorMessage();
-            };
-            iframe.onerror = function() {
-                showErrorMessage();
-            };
-            iframe.src = url; // Set the URL after defining the onload and onerror
-        }
-        function saveWebsite() {
-            var url = document.getElementById('urlInput').value.trim();
-            if (!url) {
-                alert("Please enter a valid URL.");
-                return;
-            }
-            if (!/^https?:\/\//i.test(url)) {
-                url = 'http://' + url;
-            }
-            let savedUrls = JSON.parse(localStorage.getItem('savedUrls')) || [];
-            if (!savedUrls.includes(url)) {
-                savedUrls.push(url);
-                localStorage.setItem('savedUrls', JSON.stringify(savedUrls));
-                updateSavedUrls();
-            } else {
-                alert("This website is already saved.");
-            }
-        }
-        function updateSavedUrls() {
-            let savedUrls = JSON.parse(localStorage.getItem('savedUrls')) || [];
-            let urlList = document.getElementById('urlList');
-            urlList.innerHTML = ''; // Clear current list
-            savedUrls.forEach((url, index) => {
-                let listItem = document.createElement('li');
-                listItem.classList.add('url-item');
-                listItem.innerHTML = `<a href="#" onclick="loadSavedWebsite('${url}'); return false;">${url}</a> <button onclick="deleteWebsite(${index})">Delete</button>`;
-                urlList.appendChild(listItem);
-            });
-        }
-        function loadSavedWebsite(url) {
-             document.getElementById('urlInput').value = url; // Optional: fill input
-            document.getElementById('webFrame').src = url;
-        }
-        function deleteWebsite(index) {
-            let savedUrls = JSON.parse(localStorage.getItem('savedUrls')) || [];
-            savedUrls.splice(index, 1);
-            localStorage.setItem('savedUrls', JSON.stringify(savedUrls));
-            updateSavedUrls();
-        }
-        function toggleFullScreen() {
-            var iframe = document.getElementById('iframeContainer');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.mozRequestFullScreen) { // Firefox
-                iframe.mozRequestFullScreen();
-            } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari, and Opera
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { // IE/Edge
-                iframe.msRequestFullscreen();
-            }
-        }
-        function showErrorMessage() {
-            document.getElementById('errorMessage').style.display = 'block';
-        }
-        function hideErrorMessage() {
-            document.getElementById('errorMessage').style.display = 'none';
-        }
-        // --- Embedded HTML Code Runner JavaScript Logic ---
-        // Encapsulate Code Runner logic to avoid conflicts
-        (function() {
-            // Wait for the DOM to be fully loaded, including settings menu content
-            document.addEventListener('DOMContentLoaded', function() {
-                // Check if the Code Runner elements exist (they should now be part of the DOM when settings are opened)
-                // We'll initialize the runner logic when the 'File' tab is first opened.
-                // This avoids running the logic unnecessarily on initial page load.
-                let runnerInitialized = false;
-                // Override the settings tab switching to initialize the runner
-                // Find the File tab button(s) - using querySelectorAll to be safe if there are multiple ways to select it
-                const fileTabButtons = document.querySelectorAll('.settings-tab-button[data-tab="file"]');
-                fileTabButtons.forEach(button => {
-                    button.addEventListener('click', function() {
-                         // Remove active class from all buttons and panels
-                        document.querySelectorAll('.settings-tab-button').forEach(btn => btn.classList.remove('active'));
-                        document.querySelectorAll('.settings-panel').forEach(panel => panel.classList.remove('active'));
-                        // Add active class to clicked button
-                        button.classList.add('active');
-                        // Show the corresponding panel
-                        const tabName = button.getAttribute('data-tab');
-                        document.getElementById(`${tabName}-settings-panel`).classList.add('active');
-                        // Initialize runner if not already done
-                        if (!runnerInitialized && tabName === 'file') {
-                            initCodeRunner();
-                            runnerInitialized = true;
-                        }
-                    });
-                });
-                function initCodeRunner() {
-                    // Load saved code if available (for the runner)
-                    loadSavedCodeRunner();
-                    // Run code initially for the runner
-                    runCodeRunner();
-                    // Event listeners for the runner
-                    document.getElementById('run-btn-runner').addEventListener('click', runCodeRunner);
-                    document.getElementById('clear-btn-runner').addEventListener('click', clearAllRunner);
-                    document.getElementById('save-btn-runner').addEventListener('click', saveCodeToBrowserRunner);
-                    document.getElementById('save-file-btn-runner').addEventListener('click', saveCodeToFileRunner);
-                    // Keyboard shortcut (Ctrl+Enter) for the runner
-                    // Note: This might conflict with other parts of the portal if not careful.
-                    // A more robust solution would scope the listener to the runner's textareas.
-                    document.addEventListener('keydown', function(event) {
-                        if (event.ctrlKey && event.key === 'Enter' && document.getElementById('file-settings-panel').classList.contains('active')) {
-                            runCodeRunner();
-                        }
-                    });
-                    // Make preview resizable - Simplified or omitted for integration
-                    // makeResizableRunner(); // Optional: Implement if needed
-                }
-                // Helper function to escape HTML (if needed, though not always for iframe srcdoc)
-                // function escapeHtml(unsafe) {
-                //     if (typeof unsafe !== 'string') return unsafe;
-                //     return unsafe
-                //         .replace(/&/g, "&amp;")
-                //         .replace(/</g, "<")
-                //         .replace(/>/g, ">")
-                //         .replace(/"/g, "&quot;")
-                //         .replace(/'/g, "&#039;");
-                // }
-                function runCodeRunner() {
-                    const htmlCode = document.getElementById('html-code-runner').value;
-                    const previewFrame = document.getElementById('preview-frame-runner');
-                    // Combine all code into a complete HTML document
-                    // Using srcdoc is generally safer and simpler for this kind of preview
-                    const fullHtml = `
-<!DOCTYPE html>
+    })}function loadMoreVideos(){if(nextPageToken)fetchVideos(currentQuery)}function loadPreviousVideos(){if(prevPageTokens.length>0){nextPageToken=prevPageTokens.pop();fetchVideos(currentQuery)}}function loadWebsite(){var url=document.getElementById('urlInput').value.trim();if(!url){alert("Please enter a valid URL.");return}if(!/^https?:\/\//i.test(url))url='http://'+url;document.getElementById('webFrame').src=url;hideErrorMessage();checkUrl(url)}function checkUrl(url){const iframe=document.getElementById('webFrame');iframe.onload=function(){hideErrorMessage()};iframe.onerror=function(){showErrorMessage()};iframe.src=url}function saveWebsite(){var url=document.getElementById('urlInput').value.trim();if(!url){alert("Please enter a valid URL.");return}if(!/^https?:\/\//i.test(url))url='http://'+url;let savedUrls=JSON.parse(localStorage.getItem('savedUrls'))||[];if(!savedUrls.includes(url)){savedUrls.push(url);localStorage.setItem('savedUrls',JSON.stringify(savedUrls));updateSavedUrls()}else alert("This website is already saved.")}function updateSavedUrls(){let savedUrls=JSON.parse(localStorage.getItem('savedUrls'))||[];let urlList=document.getElementById('urlList');urlList.innerHTML='';savedUrls.forEach((url,index)=>{let listItem=document.createElement('li');listItem.classList.add('url-item');listItem.innerHTML=`<a href="#" onclick="loadSavedWebsite('${url}'); return false;">${url}</a> <button onclick="deleteWebsite(${index})">Delete</button>`;urlList.appendChild(listItem)})}function loadSavedWebsite(url){document.getElementById('urlInput').value=url;document.getElementById('webFrame').src=url}function deleteWebsite(index){let savedUrls=JSON.parse(localStorage.getItem('savedUrls'))||[];savedUrls.splice(index,1);localStorage.setItem('savedUrls',JSON.stringify(savedUrls));updateSavedUrls()}function toggleFullScreen(){var iframe=document.getElementById('iframeContainer');if(iframe.requestFullscreen)iframe.requestFullscreen();else if(iframe.mozRequestFullScreen)iframe.mozRequestFullScreen();else if(iframe.webkitRequestFullscreen)iframe.webkitRequestFullscreen();else if(iframe.msRequestFullscreen)iframe.msRequestFullscreen()}function showErrorMessage(){document.getElementById('errorMessage').style.display='block'}function hideErrorMessage(){document.getElementById('errorMessage').style.display='none'}(function(){document.addEventListener('DOMContentLoaded',function(){let runnerInitialized=false;const fileTabButtons=document.querySelectorAll('.settings-tab-button[data-tab="file"]');fileTabButtons.forEach(button=>{button.addEventListener('click',function(){document.querySelectorAll('.settings-tab-button').forEach(btn=>btn.classList.remove('active'));document.querySelectorAll('.settings-panel').forEach(panel=>panel.classList.remove('active'));button.classList.add('active');const tabName=button.getAttribute('data-tab');document.getElementById(`${tabName}-settings-panel`).classList.add('active');if(!runnerInitialized&&tabName==='file'){initCodeRunner();runnerInitialized=true}})});function initCodeRunner(){loadSavedCodeRunner();runCodeRunner();document.getElementById('run-btn-runner').addEventListener('click',runCodeRunner);document.getElementById('clear-btn-runner').addEventListener('click',clearAllRunner);document.getElementById('save-btn-runner').addEventListener('click',saveCodeToBrowserRunner);document.getElementById('save-file-btn-runner').addEventListener('click',saveCodeToFileRunner);document.addEventListener('keydown',function(event){if(event.ctrlKey&&event.key==='Enter'&&document.getElementById('file-settings-panel').classList.contains('active'))runCodeRunner()})}function runCodeRunner(){const htmlCode=document.getElementById('html-code-runner').value;const previewFrame=document.getElementById('preview-frame-runner');const fullHtml=`<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -1283,25 +244,7 @@
     ${htmlCode}
 </body>
 </html>
-                    `;
-                    // Use srcdoc for the preview
-                    previewFrame.srcdoc = fullHtml;
-                }
-                function clearAllRunner() {
-                    if (confirm('Are you sure you want to clear all code in the runner?')) {
-                        document.getElementById('html-code-runner').value = '';
-                        // Clear preview
-                        const previewFrame = document.getElementById('preview-frame-runner');
-                        previewFrame.srcdoc = '';
-                    }
-                }
-                function saveCodeToBrowserRunner() {
-                    localStorage.setItem('htmlCodeRunner', document.getElementById('html-code-runner').value);
-                    alert('Code saved to browser storage successfully!');
-                }
-                function saveCodeToFileRunner() {
-                    const htmlCode = document.getElementById('html-code-runner').value;
-                    let fullHtml = `<!DOCTYPE html>
+                    `;previewFrame.srcdoc=fullHtml}function clearAllRunner(){if(confirm('Are you sure you want to clear all code in the runner?')){document.getElementById('html-code-runner').value='';const previewFrame=document.getElementById('preview-frame-runner');previewFrame.srcdoc=''}}function saveCodeToBrowserRunner(){localStorage.setItem('htmlCodeRunner',document.getElementById('html-code-runner').value);alert('Code saved to browser storage successfully!')}function saveCodeToFileRunner(){const htmlCode=document.getElementById('html-code-runner').value;let fullHtml=`<!DOCTYPE html>
 <html>
 <head>
     <title>My Web Page</title>
@@ -1309,64 +252,6 @@
 <body>
 ${htmlCode}
 </body>
-</html>`;
-                    const blob = new Blob([fullHtml], { type: 'text/html' });
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = 'my-webpage.html';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    alert('HTML file saved successfully!');
-                }
-                function loadSavedCodeRunner() {
-                    const savedHtml = localStorage.getItem('htmlCodeRunner');
-                    if (savedHtml) document.getElementById('html-code-runner').value = savedHtml;
-                }
-                // Optional: Implement resizable preview if needed
-                // function makeResizableRunner() { ... }
-            }); // End DOMContentLoaded for Runner
-        })(); // End IIFE for Runner
-        // Attach the openSettings function to the gear button
-        document.getElementById('settingsButton').addEventListener('click', openSettings);
-
-        // Fullscreen functionality for the code runner
-        function toggleFullscreen() {
-            const runnerContainer = document.querySelector('.code-runner-container');
-            const fullscreenBtn = document.getElementById('fullscreenBtn');
-            
-            if (!document.fullscreenElement) {
-                // Request fullscreen for the entire runner container
-                if (runnerContainer.requestFullscreen) {
-                    runnerContainer.requestFullscreen();
-                    fullscreenBtn.textContent = '✕';
-                } else if (runnerContainer.mozRequestFullScreen) {
-                    runnerContainer.mozRequestFullScreen();
-                    fullscreenBtn.textContent = '✕';
-                } else if (runnerContainer.webkitRequestFullscreen) {
-                    runnerContainer.webkitRequestFullscreen();
-                    fullscreenBtn.textContent = '✕';
-                } else if (runnerContainer.msRequestFullscreen) {
-                    runnerContainer.msRequestFullscreen();
-                    fullscreenBtn.textContent = '✕';
-                }
-            } else {
-                // Exit fullscreen
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                    fullscreenBtn.textContent = '⛶';
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                    fullscreenBtn.textContent = '⛶';
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                    fullscreenBtn.textContent = '⛶';
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                    fullscreenBtn.textContent = '⛶';
-                }
-            }
-        }
-    </script>
+</html>`;const blob=new Blob([fullHtml],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-webpage.html';document.body.appendChild(a);a.click();document.body.removeChild(a);alert('HTML file saved successfully!')}function loadSavedCodeRunner(){const savedHtml=localStorage.getItem('htmlCodeRunner');if(savedHtml)document.getElementById('html-code-runner').value=savedHtml}})}());document.getElementById('settingsButton').addEventListener('click',openSettings);function toggleFullscreen(){const runnerContainer=document.querySelector('.code-runner-container');const fullscreenBtn=document.getElementById('fullscreenBtn');if(!document.fullscreenElement){if(runnerContainer.requestFullscreen){runnerContainer.requestFullscreen();fullscreenBtn.textContent='✕'}else if(runnerContainer.mozRequestFullScreen){runnerContainer.mozRequestFullScreen();fullscreenBtn.textContent='✕'}else if(runnerContainer.webkitRequestFullscreen){runnerContainer.webkitRequestFullscreen();fullscreenBtn.textContent='✕'}else if(runnerContainer.msRequestFullscreen){runnerContainer.msRequestFullscreen();fullscreenBtn.textContent='✕'}}else{if(document.exitFullscreen){document.exitFullscreen();fullscreenBtn.textContent='⛶'}else if(document.mozCancelFullScreen){document.mozCancelFullScreen();fullscreenBtn.textContent='⛶'}else if(document.webkitExitFullscreen){document.webkitExitFullscreen();fullscreenBtn.textContent='⛶'}else if(document.msExitFullscreen){document.msExitFullscreen();fullscreenBtn.textContent='⛶'}}}</script></body></html>
 </body>
 </html>
